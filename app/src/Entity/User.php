@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +33,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $passwordHash = null;
+
+    /**
+     * @var Collection<int, Excuse>
+     */
+    #[ORM\OneToMany(targetEntity: Excuse::class, mappedBy: 'author')]
+    private Collection $excuses;
+
+    public function __construct()
+    {
+        $this->excuses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,5 +123,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $data["\0".self::class."\0passwordHash"] = hash('crc32c', $this->passwordHash);
 
         return $data;
+    }
+
+    /**
+     * @return Collection<int, Excuse>
+     */
+    public function getExcuses(): Collection
+    {
+        return $this->excuses;
+    }
+
+    public function addExcus(Excuse $excus): static
+    {
+        if (!$this->excuses->contains($excus)) {
+            $this->excuses->add($excus);
+            $excus->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExcus(Excuse $excus): static
+    {
+        if ($this->excuses->removeElement($excus)) {
+            // set the owning side to null (unless already changed)
+            if ($excus->getAuthor() === $this) {
+                $excus->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -1,0 +1,17 @@
+App\Entity\ExcuseTone:
+    tone_serieux:
+        name: 'Sérieux'
+        description: 'Ton neutre et crédible.'
+        riskLevel: 2
+
+    tone_dramatique:
+        name: 'Dramatique'
+        description: 'Ton intense, utile pour les urgences.'
+        riskLevel: 7
+
+    tone_professionnel:
+        name: 'Professionnel'
+        description: 'Ton formel et adapté au travail.'
+        riskLevel: 3
+
+

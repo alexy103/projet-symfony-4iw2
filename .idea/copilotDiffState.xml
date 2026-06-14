@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/fixtures/ClassicExcuse.yaml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/fixtures/ClassicExcuse.yaml" />
+              <option name="updatedContent" value="App\Entity\ClassicExcuse:&#10;    classic_excuse_1:&#10;        title: 'Bus supprimé à la dernière minute'&#10;        content: 'Mon bus a été supprimé sans annonce et je suis arrivé en retard.'&#10;        status: 'draft'&#10;        urgencyLevel: 4&#10;        credibilityScore: 72&#10;        createdAt: &lt;(new \DateTimeImmutable('2026-06-10 08:15:00'))&gt;&#10;        updatedAt: null&#10;        author: '@user_alex'&#10;        category: '@category_retard'&#10;        context: '@context_transport'&#10;        tone: '@tone_serieux'&#10;        estimatedDelay: 35&#10;        isReusable: true&#10;&#10;    classic_excuse_2:&#10;        title: 'Imprimante capricieuse'&#10;        content: 'Mon document ne s''imprimait pas et j''ai perdu du temps avant de partir.'&#10;        status: 'pending'&#10;        urgencyLevel: 3&#10;        credibilityScore: 65&#10;        createdAt: &lt;(new \DateTimeImmutable('2026-06-11 07:40:00'))&gt;&#10;        updatedAt: &lt;(new \DateTimeImmutable('2026-06-11 08:05:00'))&gt;&#10;        author: '@user_sam'&#10;        category: '@category_absence'&#10;        context: '@context_ecole'&#10;        tone: '@tone_serieux'&#10;        estimatedDelay: 20&#10;        isReusable: false&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/fixtures/EmergencyExcuse.yaml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/fixtures/EmergencyExcuse.yaml" />
+              <option name="updatedContent" value="App\Entity\EmergencyExcuse:&#10;    emergency_excuse_1:&#10;        title: 'Incident familial urgent'&#10;        content: 'J''ai dû accompagner un proche aux urgences juste avant de partir.'&#10;        status: 'pending'&#10;        urgencyLevel: 9&#10;        credibilityScore: 81&#10;        createdAt: &lt;(new \DateTimeImmutable('2026-06-12 06:55:00'))&gt;&#10;        updatedAt: null&#10;        author: '@user_alex'&#10;        category: '@category_absence'&#10;        context: '@context_travail'&#10;        tone: '@tone_dramatique'&#10;        emergencyLevel: 5&#10;        requiresProof: true&#10;&#10;    emergency_excuse_2:&#10;        title: 'Panne complète de train'&#10;        content: 'Le train est resté bloqué plus de quarante minutes entre deux gares.'&#10;        status: 'rejected'&#10;        urgencyLevel: 8&#10;        credibilityScore: 58&#10;        createdAt: &lt;(new \DateTimeImmutable('2026-06-09 09:10:00'))&gt;&#10;        updatedAt: &lt;(new \DateTimeImmutable('2026-06-09 12:25:00'))&gt;&#10;        author: '@user_sam'&#10;        category: '@category_retard'&#10;        context: '@context_transport'&#10;        tone: '@tone_dramatique'&#10;        emergencyLevel: 4&#10;        requiresProof: false&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/fixtures/ExcuseCategory.yaml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/fixtures/ExcuseCategory.yaml" />
+              <option name="updatedContent" value="App\Entity\ExcuseCategory:&#10;    category_retard:&#10;        name: 'Retard'&#10;        description: 'Excuses pour des retards ponctuels.'&#10;&#10;    category_absence:&#10;        name: 'Absence'&#10;        description: 'Excuses pour des absences courtes ou longues.'&#10;&#10;    category_reunion:&#10;        name: 'Réunion manquée'&#10;        description: 'Excuses liées aux réunions oubliées ou ratées.'&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/fixtures/ExcuseContext.yaml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/fixtures/ExcuseContext.yaml" />
+              <option name="updatedContent" value="App\Entity\ExcuseContext:&#10;    context_ecole:&#10;        name: 'École'&#10;        description: 'Contexte scolaire : cours, devoirs, examens.'&#10;&#10;    context_travail:&#10;        name: 'Travail'&#10;        description: 'Contexte professionnel : bureau, clients, réunions.'&#10;&#10;    context_transport:&#10;        name: 'Transport'&#10;        description: 'Contexte de déplacement : bus, train, trafic.'&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/fixtures/ExcuseTone.yaml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/fixtures/ExcuseTone.yaml" />
+              <option name="updatedContent" value="App\Entity\ExcuseTone:&#10;    tone_serieux:&#10;        name: 'Sérieux'&#10;        description: 'Ton neutre et crédible.'&#10;        riskLevel: 2&#10;&#10;    tone_dramatique:&#10;        name: 'Dramatique'&#10;        description: 'Ton intense, utile pour les urgences.'&#10;        riskLevel: 7&#10;&#10;    tone_professionnel:&#10;        name: 'Professionnel'&#10;        description: 'Ton formel et adapté au travail.'&#10;        riskLevel: 3&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/fixtures/ProfessionalExcuse.yaml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/fixtures/ProfessionalExcuse.yaml" />
+              <option name="updatedContent" value="App\Entity\ProfessionalExcuse:&#10;    professional_excuse_1:&#10;        title: 'Conflit de calendrier client'&#10;        content: 'Un appel client critique a dépassé le temps prévu et a bloqué mon planning.'&#10;        status: 'validated'&#10;        urgencyLevel: 6&#10;        credibilityScore: 88&#10;        createdAt: &lt;(new \DateTimeImmutable('2026-06-08 10:00:00'))&gt;&#10;        updatedAt: &lt;(new \DateTimeImmutable('2026-06-08 17:30:00'))&gt;&#10;        author: '@user_validator'&#10;        category: '@category_reunion'&#10;        context: '@context_travail'&#10;        tone: '@tone_professionnel'&#10;        targetRecipient: 'Manager équipe produit'&#10;        professionalTone: 'Formel et concis'&#10;&#10;    professional_excuse_2:&#10;        title: 'Compte-rendu envoyé hors délai'&#10;        content: 'Le compte-rendu a été retardé suite à une priorité de production inattendue.'&#10;        status: 'draft'&#10;        urgencyLevel: 5&#10;        credibilityScore: 77&#10;        createdAt: &lt;(new \DateTimeImmutable('2026-06-13 14:20:00'))&gt;&#10;        updatedAt: null&#10;        author: '@user_alex'&#10;        category: '@category_reunion'&#10;        context: '@context_travail'&#10;        tone: '@tone_professionnel'&#10;        targetRecipient: 'Client principal'&#10;        professionalTone: 'Diplomatique'&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
