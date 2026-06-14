@@ -1,0 +1,19 @@
+App\Entity\ExcuseComment:
+    excuse_comment_1:
+        excuse: '@classic_excuse_1'
+        author: '@user_validator'
+        content: 'Le contexte est clair, mais ajoute l''horaire exact du départ.'
+        createdAt: <(new \DateTimeImmutable('2026-06-10 09:00:00'))>
+
+    excuse_comment_2:
+        excuse: '@emergency_excuse_1'
+        author: '@user_admin'
+        content: 'Merci pour les précisions. L''urgence est bien justifiée.'
+        createdAt: <(new \DateTimeImmutable('2026-06-12 07:20:00'))>
+
+    excuse_comment_3:
+        excuse: '@professional_excuse_2'
+        author: '@user_sam'
+        content: 'Le ton est bon, mais la conclusion mérite d''être plus concise.'
+        createdAt: <(new \DateTimeImmutable('2026-06-13 15:05:00'))>
+

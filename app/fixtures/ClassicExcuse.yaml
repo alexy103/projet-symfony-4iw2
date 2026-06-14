@@ -11,6 +11,7 @@ App\Entity\ClassicExcuse:
         category: '@category_retard'
         context: '@context_transport'
         tone: '@tone_serieux'
+        tags: ['@tag_credible', '@tag_transport']
         estimatedDelay: 35
         isReusable: true
 
@@ -26,6 +27,7 @@ App\Entity\ClassicExcuse:
         category: '@category_absence'
         context: '@context_ecole'
         tone: '@tone_serieux'
+        tags: ['@tag_credible']
         estimatedDelay: 20
         isReusable: false
 

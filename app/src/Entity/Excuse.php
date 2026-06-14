@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ExcuseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,6 +59,39 @@ abstract class Excuse
     #[ORM\ManyToOne(inversedBy: 'excuses')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ExcuseTone $tone = null;
+
+    /**
+     * @var Collection<int, ExcuseComment>
+     */
+    #[ORM\OneToMany(targetEntity: ExcuseComment::class, mappedBy: 'excuse')]
+    private Collection $comments;
+
+    /**
+     * @var Collection<int, ExcuseRating>
+     */
+    #[ORM\OneToMany(targetEntity: ExcuseRating::class, mappedBy: 'excuse')]
+    private Collection $ratings;
+
+    /**
+     * @var Collection<int, ExcuseValidation>
+     */
+    #[ORM\OneToMany(targetEntity: ExcuseValidation::class, mappedBy: 'excuse')]
+    private Collection $validations;
+
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'excuses')]
+    #[ORM\JoinTable(name: 'excuse_tag')]
+    private Collection $tags;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
+        $this->validations = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -191,6 +226,120 @@ abstract class Excuse
     public function setTone(?ExcuseTone $tone): static
     {
         $this->tone = $tone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcuseComment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(ExcuseComment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setExcuse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(ExcuseComment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getExcuse() === $this) {
+                $comment->setExcuse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcuseRating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(ExcuseRating $rating): static
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setExcuse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(ExcuseRating $rating): static
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getExcuse() === $this) {
+                $rating->setExcuse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcuseValidation>
+     */
+    public function getValidations(): Collection
+    {
+        return $this->validations;
+    }
+
+    public function addValidation(ExcuseValidation $validation): static
+    {
+        if (!$this->validations->contains($validation)) {
+            $this->validations->add($validation);
+            $validation->setExcuse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeValidation(ExcuseValidation $validation): static
+    {
+        if ($this->validations->removeElement($validation)) {
+            // set the owning side to null (unless already changed)
+            if ($validation->getExcuse() === $this) {
+                $validation->setExcuse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }

@@ -1,0 +1,21 @@
+App\Entity\Badge:
+    badge_mytho_debutant:
+        name: 'Mytho débutant'
+        description: 'Première excuse publiée dans l''application.'
+        icon: 'badge-mytho-debutant.svg'
+
+    badge_retardataire:
+        name: 'Retardataire professionnel'
+        description: 'A accumulé plusieurs excuses de retard crédibles.'
+        icon: 'badge-retardataire.svg'
+
+    badge_improvisation:
+        name: 'Maître de l''improvisation'
+        description: 'S''adapte à tous les contextes avec une excuse cohérente.'
+        icon: 'badge-improvisation.svg'
+
+    badge_validateur:
+        name: 'Validateur impitoyable'
+        description: 'A traité des excuses en attente avec rigueur.'
+        icon: 'badge-validateur.svg'
+

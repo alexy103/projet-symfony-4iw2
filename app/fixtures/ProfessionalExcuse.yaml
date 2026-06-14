@@ -11,6 +11,7 @@ App\Entity\ProfessionalExcuse:
         category: '@category_reunion'
         context: '@context_travail'
         tone: '@tone_professionnel'
+        tags: ['@tag_professionnel', '@tag_credible']
         targetRecipient: 'Manager équipe produit'
         professionalTone: 'Formel et concis'
 
@@ -26,6 +27,7 @@ App\Entity\ProfessionalExcuse:
         category: '@category_reunion'
         context: '@context_travail'
         tone: '@tone_professionnel'
+        tags: ['@tag_professionnel', '@tag_absurde']
         targetRecipient: 'Client principal'
         professionalTone: 'Diplomatique'
 

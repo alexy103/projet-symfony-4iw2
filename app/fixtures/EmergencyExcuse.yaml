@@ -11,6 +11,7 @@ App\Entity\EmergencyExcuse:
         category: '@category_absence'
         context: '@context_travail'
         tone: '@tone_dramatique'
+        tags: ['@tag_credible', '@tag_risque']
         emergencyLevel: 5
         requiresProof: true
 
@@ -26,6 +27,7 @@ App\Entity\EmergencyExcuse:
         category: '@category_retard'
         context: '@context_transport'
         tone: '@tone_dramatique'
+        tags: ['@tag_risque', '@tag_transport']
         emergencyLevel: 4
         requiresProof: false
 
