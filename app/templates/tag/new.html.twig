@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau tag — Excusatron 3000{% endblock %}
+
+{% block body %}
+    <div class="max-w-lg mx-auto">
+        <h1 class="text-2xl font-extrabold text-slate-900 mb-6">Nouveau tag</h1>
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            {{ include('tag/_form.html.twig', {button_label: 'Créer'}) }}
+        </div>
+    </div>
+{% endblock %}
