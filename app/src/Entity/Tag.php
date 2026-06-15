@@ -21,6 +21,9 @@ class Tag
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $color = null;
 
+    #[ORM\ManyToOne]
+    private ?User $owner = null;
+
     /**
      * @var Collection<int, Excuse>
      */
@@ -59,6 +62,23 @@ class Tag
         $this->color = $color;
 
         return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return null === $this->owner;
     }
 
     /**
