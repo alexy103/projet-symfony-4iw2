@@ -19,3 +19,13 @@ App\Entity\Tag:
         name: 'Professionnel'
         color: '#37474F'
 
+    tag_alex_perso:
+        name: 'Spécial Alex'
+        color: '#00897B'
+        owner: '@user_alex'
+
+    tag_sam_perso:
+        name: 'Spécial Sam'
+        color: '#F4511E'
+        owner: '@user_sam'
+
