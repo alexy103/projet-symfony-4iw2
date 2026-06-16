@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Badges — Excusatron 3000{% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-extrabold text-slate-900">Badges</h1>
+                <p class="text-sm text-slate-500">Toutes les récompenses à débloquer. Celles que vous avez déjà obtenues sont mises en avant.</p>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_badge_new') }}"
+                   class="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
+                    + Nouveau badge
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+            {% for badge in badges %}
+                {% set earned = badge.id in earned_ids %}
+                <div class="rounded-xl border p-5 flex items-start gap-4 {{ earned ? 'bg-white border-indigo-200 shadow-sm' : 'bg-slate-50 border-slate-200 opacity-75' }}">
+                    <div class="text-3xl">
+                        {% if badge.icon and '.' in badge.icon %}
+                            <img src="/uploads/badges/{{ badge.icon }}" alt="" class="w-10 h-10 object-contain"
+                                 onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🏅'}))">
+                        {% else %}
+                            {{ badge.icon|default('🏅') }}
+                        {% endif %}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <h2 class="font-bold text-slate-900">{{ badge.name }}</h2>
+                            {% if earned %}
+                                <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">✓ Obtenu</span>
+                            {% endif %}
+                        </div>
+                        {% if badge.description %}
+                            <p class="mt-1 text-sm text-slate-600">{{ badge.description }}</p>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_VALIDATOR') %}
+                            <div class="mt-3 flex items-center gap-2">
+                                <a href="{{ path('app_badge_recipients', {id: badge.id}) }}"
+                                   class="px-3 py-1.5 rounded-md bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-sm transition">Attribuer</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('app_badge_edit', {id: badge.id}) }}"
+                                       class="px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-sm transition">Modifier</a>
+                                    {{ include('badge/_delete_form.html.twig') }}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-slate-400 text-center py-8 sm:col-span-2">Aucun badge pour l'instant.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
