@@ -40,6 +40,9 @@
                                 <span class="absolute -top-0.5 -right-0.5 min-w-[1.1rem] h-[1.1rem] px-1 rounded-full bg-red-500 text-white text-[0.65rem] font-bold flex items-center justify-center">{{ unread_count }}</span>
                             {% endif %}
                         </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin') }}" class="px-3 py-2 rounded-md bg-slate-800 text-white hover:bg-slate-700 transition">Admin</a>
+                        {% endif %}
                     {% endif %}
 
                     {% if app.user %}
