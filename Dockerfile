@@ -1,8 +1,8 @@
 FROM php:8.4-apache
 
 RUN apt-get update && \
-    apt-get install -y git libpq-dev unzip libzip-dev && \
-    docker-php-ext-install pdo_pgsql zip && \
+    apt-get install -y git libpq-dev unzip libzip-dev libicu-dev && \
+    docker-php-ext-install pdo_pgsql zip intl && \
     rm -rf /var/lib/apt/lists/*
 
 # Installer Composer depuis l'image officielle Composer
