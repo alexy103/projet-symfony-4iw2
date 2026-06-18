@@ -375,11 +375,9 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 
 - Etape 1 terminee : `app/src/Security/Voter/ExcuseVoter.php` implemente.
 - Etape 2 terminee : securisation minimale des routes dans `app/config/packages/security.yaml`.
+- Etape 3 terminee : methodes repository ajoutees dans `app/src/Repository/ExcuseRepository.php`.
 
 ### Prochaine etape
 
-- Ajouter dans `app/src/Repository/ExcuseRepository.php` :
-  - `findPendingExcuses()`
-  - `findUserExcuses(User $user)`
-  - `findValidatedExcuses()`
-  - `findByFilters(...)`
+- Creer `ExcuseController` avec pages minimales : liste, detail, mes excuses, creation, edition, suppression.
+- Integrer les checks Voter dans les actions sensibles (`EXCUSE_VIEW`, `EXCUSE_EDIT`, `EXCUSE_DELETE`).
