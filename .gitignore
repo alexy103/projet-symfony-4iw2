@@ -1,0 +1,19 @@
+# IDE / éditeurs
+/.idea/
+/.vscode/
+*.iml
+
+# Claude Code
+/.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker / environnement local
+/.env.local
+/docker-compose.override.yml
+
+# Logs
+*.log
