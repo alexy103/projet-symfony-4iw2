@@ -601,7 +601,6 @@ Endpoints possibles :
 ```txt
 GET /api/v1/excuses/random
 GET /api/v1/excuses/{id}
-POST /api/v1/excuses/generate
 ```
 
 L’API doit utiliser le Serializer Symfony avec des groupes de normalisation.
@@ -862,6 +861,7 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 
 - Le projet doit coller au maximum au sujet de cours pour viser une bonne note.
 - Le Voter personnalise est obligatoire et prioritaire dans le flux metier.
+- L'API du projet est implementee avec API Platform.
 - Les permissions cibles de `ExcuseVoter` sont :
   - `EXCUSE_VIEW`
   - `EXCUSE_EDIT`
@@ -875,8 +875,16 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - `EXCUSE_DELETE` : auteur uniquement, si statut different de `validated`.
 - `EXCUSE_VALIDATE` : `ROLE_VALIDATOR` uniquement, et excuse en `pending`.
 - `EXCUSE_VIEW` : auteur, validateur et admin.
+- Les routes `/validator` sont accessibles a `ROLE_VALIDATOR` et `ROLE_ADMIN`.
 
 ### Etat d'avancement
 
-- Etape 1 lancee : implementation de `ExcuseVoter` dans `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 1 terminee : `ExcuseVoter` implemente dans `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 2 terminee : regles `access_control` minimales ajoutees dans `app/config/packages/security.yaml`.
+- Etape 3 terminee : methodes metier ajoutees dans `app/src/Repository/ExcuseRepository.php` (`findPendingExcuses`, `findUserExcuses`, `findValidatedExcuses`, `findByFilters`).
+- Etape 4 terminee : `ExcuseController` ajoute avec pages Twig minimales (liste, detail, mes excuses, creation, edition, suppression) et integration du Voter.
+- Etape 5 terminee : flux validator ajoute (`/validator/excuses`, actions accept/reject) avec creation d'entrees `ExcuseValidation`.
+- Etape 6 terminee : API Platform installee et endpoints API v1 excuses disponibles (`/api/v1/excuses/{id}`, `/api/v1/excuses/random`).
+- Prochaine etape : integration meteo via HttpClient puis tests fonctionnels de securite en fin de flux.
+
 
