@@ -1,0 +1,14 @@
+App\Entity\ExcuseContext:
+    context_ecole:
+        name: 'École'
+        description: 'Contexte scolaire : cours, devoirs, examens.'
+
+    context_travail:
+        name: 'Travail'
+        description: 'Contexte professionnel : bureau, clients, réunions.'
+
+    context_transport:
+        name: 'Transport'
+        description: 'Contexte de déplacement : bus, train, trafic.'
+
+

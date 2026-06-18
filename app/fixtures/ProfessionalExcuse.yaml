@@ -1,0 +1,34 @@
+App\Entity\ProfessionalExcuse:
+    professional_excuse_1:
+        title: 'Conflit de calendrier client'
+        content: 'Un appel client critique a dépassé le temps prévu et a bloqué mon planning.'
+        status: 'validated'
+        urgencyLevel: 6
+        credibilityScore: 88
+        createdAt: <(new \DateTimeImmutable('2026-06-08 10:00:00'))>
+        updatedAt: <(new \DateTimeImmutable('2026-06-08 17:30:00'))>
+        author: '@user_validator'
+        category: '@category_reunion'
+        context: '@context_travail'
+        tone: '@tone_professionnel'
+        tags: ['@tag_professionnel', '@tag_credible']
+        targetRecipient: 'Manager équipe produit'
+        professionalTone: 'Formel et concis'
+
+    professional_excuse_2:
+        title: 'Compte-rendu envoyé hors délai'
+        content: 'Le compte-rendu a été retardé suite à une priorité de production inattendue.'
+        status: 'draft'
+        urgencyLevel: 5
+        credibilityScore: 77
+        createdAt: <(new \DateTimeImmutable('2026-06-13 14:20:00'))>
+        updatedAt: null
+        author: '@user_alex'
+        category: '@category_reunion'
+        context: '@context_travail'
+        tone: '@tone_professionnel'
+        tags: ['@tag_professionnel', '@tag_absurde']
+        targetRecipient: 'Client principal'
+        professionalTone: 'Diplomatique'
+
+

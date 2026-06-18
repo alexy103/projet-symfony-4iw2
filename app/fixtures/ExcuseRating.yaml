@@ -1,0 +1,25 @@
+App\Entity\ExcuseRating:
+    excuse_rating_1:
+        excuse: '@classic_excuse_1'
+        author: '@user_sam'
+        score: 4
+        createdAt: <(new \DateTimeImmutable('2026-06-10 09:12:00'))>
+
+    excuse_rating_2:
+        excuse: '@emergency_excuse_1'
+        author: '@user_validator'
+        score: 5
+        createdAt: <(new \DateTimeImmutable('2026-06-12 07:35:00'))>
+
+    excuse_rating_3:
+        excuse: '@professional_excuse_1'
+        author: '@user_alex'
+        score: 5
+        createdAt: <(new \DateTimeImmutable('2026-06-08 18:10:00'))>
+
+    excuse_rating_4:
+        excuse: '@professional_excuse_2'
+        author: '@user_admin'
+        score: 3
+        createdAt: <(new \DateTimeImmutable('2026-06-13 16:00:00'))>
+

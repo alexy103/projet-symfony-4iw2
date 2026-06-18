@@ -1,0 +1,34 @@
+App\Entity\ClassicExcuse:
+    classic_excuse_1:
+        title: 'Bus supprimé à la dernière minute'
+        content: 'Mon bus a été supprimé sans annonce et je suis arrivé en retard.'
+        status: 'draft'
+        urgencyLevel: 4
+        credibilityScore: 72
+        createdAt: <(new \DateTimeImmutable('2026-06-10 08:15:00'))>
+        updatedAt: null
+        author: '@user_alex'
+        category: '@category_retard'
+        context: '@context_transport'
+        tone: '@tone_serieux'
+        tags: ['@tag_credible', '@tag_transport']
+        estimatedDelay: 35
+        isReusable: true
+
+    classic_excuse_2:
+        title: 'Imprimante capricieuse'
+        content: 'Mon document ne s''imprimait pas et j''ai perdu du temps avant de partir.'
+        status: 'pending'
+        urgencyLevel: 3
+        credibilityScore: 65
+        createdAt: <(new \DateTimeImmutable('2026-06-11 07:40:00'))>
+        updatedAt: <(new \DateTimeImmutable('2026-06-11 08:05:00'))>
+        author: '@user_sam'
+        category: '@category_absence'
+        context: '@context_ecole'
+        tone: '@tone_serieux'
+        tags: ['@tag_credible']
+        estimatedDelay: 20
+        isReusable: false
+
+

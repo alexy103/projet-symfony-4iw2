@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +33,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $passwordHash = null;
+
+    /**
+     * @var Collection<int, Excuse>
+     */
+    #[ORM\OneToMany(targetEntity: Excuse::class, mappedBy: 'author')]
+    private Collection $excuses;
+
+    /**
+     * @var Collection<int, ExcuseComment>
+     */
+    #[ORM\OneToMany(targetEntity: ExcuseComment::class, mappedBy: 'author')]
+    private Collection $excuseComments;
+
+    /**
+     * @var Collection<int, ExcuseRating>
+     */
+    #[ORM\OneToMany(targetEntity: ExcuseRating::class, mappedBy: 'author')]
+    private Collection $excuseRatings;
+
+    /**
+     * @var Collection<int, ExcuseValidation>
+     */
+    #[ORM\OneToMany(targetEntity: ExcuseValidation::class, mappedBy: 'validator')]
+    private Collection $excuseValidations;
+
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
+    private Collection $notifications;
+
+    /**
+     * @var Collection<int, Badge>
+     */
+    #[ORM\ManyToMany(targetEntity: Badge::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: 'user_badge')]
+    private Collection $badges;
+
+    public function __construct()
+    {
+        $this->excuses = new ArrayCollection();
+        $this->excuseComments = new ArrayCollection();
+        $this->excuseRatings = new ArrayCollection();
+        $this->excuseValidations = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->badges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,5 +159,179 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $data["\0".self::class."\0passwordHash"] = hash('crc32c', $this->passwordHash);
 
         return $data;
+    }
+
+    /**
+     * @return Collection<int, Excuse>
+     */
+    public function getExcuses(): Collection
+    {
+        return $this->excuses;
+    }
+
+    public function addExcus(Excuse $excus): static
+    {
+        if (!$this->excuses->contains($excus)) {
+            $this->excuses->add($excus);
+            $excus->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExcus(Excuse $excus): static
+    {
+        if ($this->excuses->removeElement($excus)) {
+            // set the owning side to null (unless already changed)
+            if ($excus->getAuthor() === $this) {
+                $excus->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcuseComment>
+     */
+    public function getExcuseComments(): Collection
+    {
+        return $this->excuseComments;
+    }
+
+    public function addExcuseComment(ExcuseComment $excuseComment): static
+    {
+        if (!$this->excuseComments->contains($excuseComment)) {
+            $this->excuseComments->add($excuseComment);
+            $excuseComment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExcuseComment(ExcuseComment $excuseComment): static
+    {
+        if ($this->excuseComments->removeElement($excuseComment)) {
+            // set the owning side to null (unless already changed)
+            if ($excuseComment->getAuthor() === $this) {
+                $excuseComment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcuseRating>
+     */
+    public function getExcuseRatings(): Collection
+    {
+        return $this->excuseRatings;
+    }
+
+    public function addExcuseRating(ExcuseRating $excuseRating): static
+    {
+        if (!$this->excuseRatings->contains($excuseRating)) {
+            $this->excuseRatings->add($excuseRating);
+            $excuseRating->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExcuseRating(ExcuseRating $excuseRating): static
+    {
+        if ($this->excuseRatings->removeElement($excuseRating)) {
+            // set the owning side to null (unless already changed)
+            if ($excuseRating->getAuthor() === $this) {
+                $excuseRating->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcuseValidation>
+     */
+    public function getExcuseValidations(): Collection
+    {
+        return $this->excuseValidations;
+    }
+
+    public function addExcuseValidation(ExcuseValidation $excuseValidation): static
+    {
+        if (!$this->excuseValidations->contains($excuseValidation)) {
+            $this->excuseValidations->add($excuseValidation);
+            $excuseValidation->setValidator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExcuseValidation(ExcuseValidation $excuseValidation): static
+    {
+        if ($this->excuseValidations->removeElement($excuseValidation)) {
+            // set the owning side to null (unless already changed)
+            if ($excuseValidation->getValidator() === $this) {
+                $excuseValidation->setValidator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Badge>
+     */
+    public function getBadges(): Collection
+    {
+        return $this->badges;
+    }
+
+    public function addBadge(Badge $badge): static
+    {
+        if (!$this->badges->contains($badge)) {
+            $this->badges->add($badge);
+        }
+
+        return $this;
+    }
+
+    public function removeBadge(Badge $badge): static
+    {
+        $this->badges->removeElement($badge);
+
+        return $this;
     }
 }
