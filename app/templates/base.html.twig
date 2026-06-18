@@ -31,6 +31,10 @@
                     <a href="{{ path('app_home') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Accueil</a>
 
                     {% if app.user %}
+                        <a href="{{ path('app_tag_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Tags</a>
+                    {% endif %}
+
+                    {% if app.user %}
                         <div class="relative" data-dropdown>
                             <button type="button" data-dropdown-toggle
                                     class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-slate-100 transition">
