@@ -1,0 +1,41 @@
+{{ form_start(form) }}
+    <div class="space-y-4">
+        <div>
+            {{ form_label(form.name, null, {label_attr: {class: 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+            {{ form_widget(form.name, {attr: {class: 'w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none'}}) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div>
+            {{ form_label(form.description, null, {label_attr: {class: 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+            {{ form_widget(form.description, {attr: {class: 'w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none', rows: 3}}) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div>
+            {{ form_label(form.icon, null, {label_attr: {class: 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+            {{ form_widget(form.icon, {attr: {class: 'w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none'}}) }}
+            {{ form_help(form.icon) }}
+            {{ form_errors(form.icon) }}
+        </div>
+
+        <div>
+            {{ form_label(form.iconFile, null, {label_attr: {class: 'block text-sm font-medium text-slate-700 mb-1'}}) }}
+            {% if badge.icon %}
+                <img src="/uploads/badges/{{ badge.icon }}" alt="" class="w-12 h-12 object-contain rounded mb-2"
+                     onerror="this.style.display='none'">
+            {% endif %}
+            {{ form_widget(form.iconFile, {attr: {class: 'block w-full text-sm text-slate-600 file:mr-3 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200'}}) }}
+            {{ form_help(form.iconFile) }}
+            {{ form_errors(form.iconFile) }}
+        </div>
+    </div>
+
+    <div class="mt-6 flex items-center gap-3">
+        <button type="submit"
+                class="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
+            {{ button_label|default('Enregistrer') }}
+        </button>
+        <a href="{{ path('app_badge_index') }}" class="text-sm text-slate-500 hover:text-slate-700">Annuler</a>
+    </div>
+{{ form_end(form) }}
