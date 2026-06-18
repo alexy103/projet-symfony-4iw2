@@ -19,4 +19,3 @@ App\Entity\ExcuseValidation:
         status: 'rejected'
         comment: 'Rejetée : la version actuelle manque d''éléments vérifiables.'
         validatedAt: <(new \DateTimeImmutable('2026-06-09 12:30:00'))>
-

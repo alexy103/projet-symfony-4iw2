@@ -853,3 +853,30 @@ Excuse
 ```
 
 Les autres entités doivent être ajoutées progressivement, une fois que la création et l’affichage d’excuses fonctionnent correctement.
+
+## Suivi de mise en oeuvre (partage equipe)
+
+Cette section est maintenue au fil des echanges pour aligner tous les collaborateurs.
+
+### Decisions validees
+
+- Le projet doit coller au maximum au sujet de cours pour viser une bonne note.
+- Le Voter personnalise est obligatoire et prioritaire dans le flux metier.
+- Les permissions cibles de `ExcuseVoter` sont :
+  - `EXCUSE_VIEW`
+  - `EXCUSE_EDIT`
+  - `EXCUSE_DELETE`
+  - `EXCUSE_VALIDATE`
+
+### Regles Voter retenues
+
+- `ROLE_ADMIN` peut tout faire.
+- `EXCUSE_EDIT` : auteur uniquement, statut `draft` ou `rejected`.
+- `EXCUSE_DELETE` : auteur uniquement, si statut different de `validated`.
+- `EXCUSE_VALIDATE` : `ROLE_VALIDATOR` uniquement, et excuse en `pending`.
+- `EXCUSE_VIEW` : auteur, validateur et admin.
+
+### Etat d'avancement
+
+- Etape 1 lancee : implementation de `ExcuseVoter` dans `app/src/Security/Voter/ExcuseVoter.php`.
+

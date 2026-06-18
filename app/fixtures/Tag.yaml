@@ -18,4 +18,3 @@ App\Entity\Tag:
     tag_professionnel:
         name: 'Professionnel'
         color: '#37474F'
-

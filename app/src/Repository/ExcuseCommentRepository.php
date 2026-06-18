@@ -16,4 +16,3 @@ class ExcuseCommentRepository extends ServiceEntityRepository
         parent::__construct($registry, ExcuseComment::class);
     }
 }
-
