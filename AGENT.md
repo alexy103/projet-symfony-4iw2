@@ -885,6 +885,8 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - Etape 4 terminee : `ExcuseController` ajoute avec pages Twig minimales (liste, detail, mes excuses, creation, edition, suppression) et integration du Voter.
 - Etape 5 terminee : flux validator ajoute (`/validator/excuses`, actions accept/reject) avec creation d'entrees `ExcuseValidation`.
 - Etape 6 terminee : API Platform installee et endpoints API v1 excuses disponibles (`/api/v1/excuses/{id}`, `/api/v1/excuses/random`).
+- Etape 7 terminee : ressources API ajoutees directement sur les entites exposees (`Excuse`, `ExcuseCategory`, `ExcuseContext`, `ExcuseTone`, `Tag`).
+- Etape 8 terminee : suppression de `nelmio/cors-bundle` (config, bundle, recettes Flex et lockfiles) avec verification `lint:container` OK.
 - Prochaine etape : integration meteo via HttpClient puis tests fonctionnels de securite en fin de flux.
 
 

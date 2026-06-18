@@ -382,6 +382,8 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 - Etape 4 terminee : `app/src/Controller/ExcuseController.php` + templates Twig du flux excuses.
 - Etape 5 terminee : `app/src/Controller/ValidatorExcuseController.php` + page Twig validator (pending, accept/reject, traçabilite `ExcuseValidation`).
 - Etape 6 terminee : API Platform installee + endpoints `GET /api/v1/excuses/{id}` et `GET /api/v1/excuses/random`.
+- Etape 7 terminee : `ApiResource` ajoute sur les entites exposees (`Excuse`, `ExcuseCategory`, `ExcuseContext`, `ExcuseTone`, `Tag`) en lecture.
+- Etape 8 terminee : suppression complete de Nelmio CORS (`.env`, `bundles.php`, recette Flex, lockfiles) et verification Symfony OK.
 
 ### Prochaine etape
 
@@ -400,10 +402,10 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 
 ### API (strategie retenue)
 
-- [ ] Mettre en place API Platform (choix valide car vu en cours).
+- [x] Mettre en place API Platform (choix valide car vu en cours).
 - [ ] Exposer les endpoints API minimaux du sujet :
-  - [ ] `GET /api/v1/excuses/random`
-  - [ ] `GET /api/v1/excuses/{id}`
+  - [x] `GET /api/v1/excuses/random`
+  - [x] `GET /api/v1/excuses/{id}`
 - [ ] Configurer les groupes Serializer (`excuse:read`, `excuse:write`, `user:read`, `tag:read`).
 
 ### API externe meteo (idee retenue)
