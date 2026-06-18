@@ -377,10 +377,11 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 - Etape 2 terminee : securisation minimale des routes dans `app/config/packages/security.yaml`.
 - Etape 3 terminee : methodes repository ajoutees dans `app/src/Repository/ExcuseRepository.php`.
 - Etape 4 terminee : `app/src/Controller/ExcuseController.php` + templates Twig du flux excuses.
+- Etape 5 terminee : `app/src/Controller/ValidatorExcuseController.php` + page Twig validator (pending, accept/reject, traçabilite `ExcuseValidation`).
 
 ### Prochaine etape
 
-- Mettre en place le flux validator :
-  - liste des excuses en attente (`/validator/excuses`)
-  - actions accepter/refuser (`/validator/excuses/{id}/accept`, `/validator/excuses/{id}/reject`)
-  - creation d'une entree `ExcuseValidation` a chaque action.
+- Ajouter des tests fonctionnels de securite :
+  - un user non validator ne peut pas valider
+  - un validator peut valider uniquement les excuses `pending`
+  - controle des acces sur les routes validator.

@@ -80,3 +80,4 @@ class ExcuseRating
         return $this;
     }
 }
+
