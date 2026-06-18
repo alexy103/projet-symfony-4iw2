@@ -1,0 +1,35 @@
+{{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.content) }}
+    {{ form_row(form.urgencyLevel) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.context) }}
+    {{ form_row(form.tone) }}
+
+    {% if form.estimatedDelay is defined %}
+        {{ form_row(form.estimatedDelay) }}
+    {% endif %}
+    {% if form.isReusable is defined %}
+        {{ form_row(form.isReusable) }}
+    {% endif %}
+
+    {% if form.emergencyLevel is defined %}
+        {{ form_row(form.emergencyLevel) }}
+    {% endif %}
+    {% if form.requiresProof is defined %}
+        {{ form_row(form.requiresProof) }}
+    {% endif %}
+
+    {% if form.targetRecipient is defined %}
+        {{ form_row(form.targetRecipient) }}
+    {% endif %}
+    {% if form.professionalTone is defined %}
+        {{ form_row(form.professionalTone) }}
+    {% endif %}
+
+    <div class="pt-2 flex gap-2">
+        <button class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition" type="submit">Enregistrer</button>
+        <a href="{{ path('app_my_excuses') }}" class="px-4 py-2 rounded-md bg-slate-200 hover:bg-slate-300 transition">Annuler</a>
+    </div>
+{{ form_end(form) }}
+

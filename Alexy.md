@@ -376,8 +376,11 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 - Etape 1 terminee : `app/src/Security/Voter/ExcuseVoter.php` implemente.
 - Etape 2 terminee : securisation minimale des routes dans `app/config/packages/security.yaml`.
 - Etape 3 terminee : methodes repository ajoutees dans `app/src/Repository/ExcuseRepository.php`.
+- Etape 4 terminee : `app/src/Controller/ExcuseController.php` + templates Twig du flux excuses.
 
 ### Prochaine etape
 
-- Creer `ExcuseController` avec pages minimales : liste, detail, mes excuses, creation, edition, suppression.
-- Integrer les checks Voter dans les actions sensibles (`EXCUSE_VIEW`, `EXCUSE_EDIT`, `EXCUSE_DELETE`).
+- Mettre en place le flux validator :
+  - liste des excuses en attente (`/validator/excuses`)
+  - actions accepter/refuser (`/validator/excuses/{id}/accept`, `/validator/excuses/{id}/reject`)
+  - creation d'une entree `ExcuseValidation` a chaque action.

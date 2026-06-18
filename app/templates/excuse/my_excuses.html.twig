@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes excuses{% endblock %}
+
+{% block body %}
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Mes excuses</h1>
+        <a href="{{ path('app_excuse_new') }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">Créer</a>
+    </div>
+
+    {% if excuses is empty %}
+        <p class="text-slate-500">Tu n'as encore créé aucune excuse.</p>
+    {% else %}
+        <div class="space-y-3">
+            {% for excuse in excuses %}
+                <article class="p-4 bg-white border rounded-lg">
+                    <div class="flex items-center justify-between gap-2">
+                        <h2 class="font-semibold">{{ excuse.title }}</h2>
+                        <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mt-1">{{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                    <div class="mt-3 flex gap-3">
+                        <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="text-indigo-600 hover:underline">Voir</a>
+                        {% if is_granted('EXCUSE_EDIT', excuse) %}
+                            <a href="{{ path('app_excuse_edit', {'id': excuse.id}) }}" class="text-amber-600 hover:underline">Modifier</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+

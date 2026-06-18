@@ -881,5 +881,6 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - Etape 1 terminee : `ExcuseVoter` implemente dans `app/src/Security/Voter/ExcuseVoter.php`.
 - Etape 2 terminee : regles `access_control` minimales ajoutees dans `app/config/packages/security.yaml`.
 - Etape 3 terminee : methodes metier ajoutees dans `app/src/Repository/ExcuseRepository.php` (`findPendingExcuses`, `findUserExcuses`, `findValidatedExcuses`, `findByFilters`).
-- Prochaine etape : mise en place de `ExcuseController` (liste, detail, mes excuses, creation/edition/suppression) avec integration du Voter.
+- Etape 4 terminee : `ExcuseController` ajoute avec pages Twig minimales (liste, detail, mes excuses, creation, edition, suppression) et integration du Voter.
+- Prochaine etape : flux validator (`/validator/excuses`, accept/reject) avec creation d'une entree `ExcuseValidation`.
 
