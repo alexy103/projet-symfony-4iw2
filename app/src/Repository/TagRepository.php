@@ -31,4 +31,3 @@ class TagRepository extends ServiceEntityRepository
             ->getResult();
     }
 }
-

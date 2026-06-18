@@ -1,31 +1,30 @@
 App\Entity\Tag:
     tag_credible:
-        name: 'Crédible'
-        color: '#2E7D32'
+        name: "Crédible"
+        color: "#2E7D32"
 
     tag_risque:
-        name: 'Risqué'
-        color: '#C62828'
+        name: "Risqué"
+        color: "#C62828"
 
     tag_absurde:
-        name: 'Absurde'
-        color: '#6A1B9A'
+        name: "Absurde"
+        color: "#6A1B9A"
 
     tag_transport:
-        name: 'Transport'
-        color: '#1565C0'
+        name: "Transport"
+        color: "#1565C0"
 
     tag_professionnel:
-        name: 'Professionnel'
-        color: '#37474F'
+        name: "Professionnel"
+        color: "#37474F"
 
     tag_alex_perso:
-        name: 'Spécial Alex'
-        color: '#00897B'
-        owner: '@user_alex'
+        name: "Spécial Alex"
+        color: "#00897B"
+        owner: "@user_alex"
 
     tag_sam_perso:
-        name: 'Spécial Sam'
-        color: '#F4511E'
-        owner: '@user_sam'
-
+        name: "Spécial Sam"
+        color: "#F4511E"
+        owner: "@user_sam"

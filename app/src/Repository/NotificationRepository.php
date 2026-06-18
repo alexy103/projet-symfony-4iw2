@@ -30,4 +30,3 @@ class NotificationRepository extends ServiceEntityRepository
             ->getResult();
     }
 }
-

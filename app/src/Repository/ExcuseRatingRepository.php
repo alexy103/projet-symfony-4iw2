@@ -16,4 +16,3 @@ class ExcuseRatingRepository extends ServiceEntityRepository
         parent::__construct($registry, ExcuseRating::class);
     }
 }
-
