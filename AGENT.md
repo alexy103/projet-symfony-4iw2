@@ -878,5 +878,7 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 
 ### Etat d'avancement
 
-- Etape 1 lancee : implementation de `ExcuseVoter` dans `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 1 terminee : `ExcuseVoter` implemente dans `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 2 terminee : regles `access_control` minimales ajoutees dans `app/config/packages/security.yaml`.
+- Prochaine etape : methodes metier dans `ExcuseRepository` (`findPendingExcuses`, `findUserExcuses`, `findValidatedExcuses`, `findByFilters`).
 

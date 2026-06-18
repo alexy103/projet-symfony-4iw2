@@ -373,4 +373,13 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 
 ### Avancement
 
-- Etape 1 en cours : implementation de `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 1 terminee : `app/src/Security/Voter/ExcuseVoter.php` implemente.
+- Etape 2 terminee : securisation minimale des routes dans `app/config/packages/security.yaml`.
+
+### Prochaine etape
+
+- Ajouter dans `app/src/Repository/ExcuseRepository.php` :
+  - `findPendingExcuses()`
+  - `findUserExcuses(User $user)`
+  - `findValidatedExcuses()`
+  - `findByFilters(...)`
