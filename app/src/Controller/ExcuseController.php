@@ -9,6 +9,7 @@ use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Form\ExcuseType;
 use App\Repository\ExcuseRepository;
+use App\Repository\ExcuseValidationRepository;
 use App\Security\Voter\ExcuseVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,13 +39,16 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/my-excuses', name: 'app_my_excuses', methods: ['GET'])]
-    public function myExcuses(ExcuseRepository $excuseRepository): Response
+    public function myExcuses(ExcuseRepository $excuseRepository, ExcuseValidationRepository $validationRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
+        $excuses = $excuseRepository->findUserExcuses($user);
+
         return $this->render('excuse/my_excuses.html.twig', [
-            'excuses' => $excuseRepository->findUserExcuses($user),
+            'excuses' => $excuses,
+            'rejectionReasons' => $this->buildRejectionReasons($excuses, $validationRepository),
         ]);
     }
 
@@ -87,12 +91,15 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/excuses/{id}', name: 'app_excuse_show', methods: ['GET'])]
-    public function show(Excuse $excuse): Response
+    public function show(Excuse $excuse, ExcuseValidationRepository $validationRepository): Response
     {
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_VIEW, $excuse);
 
+        $rejectionReasons = $this->buildRejectionReasons([$excuse], $validationRepository);
+
         return $this->render('excuse/show.html.twig', [
             'excuse' => $excuse,
+            'rejectionReason' => $rejectionReasons[$excuse->getId() ?? 0] ?? null,
         ]);
     }
 
@@ -154,6 +161,30 @@ final class ExcuseController extends AbstractController
         return $this->redirectToRoute('app_my_excuses');
     }
 
+    #[Route('/excuses/{id}/resubmit', name: 'app_excuse_resubmit', methods: ['POST'])]
+    public function resubmit(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_EDIT, $excuse);
+
+        if (!$this->isCsrfTokenValid('resubmit'.$excuse->getId(), $request->getPayload()->getString('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ('rejected' !== $excuse->getStatus()) {
+            $this->addFlash('warning', 'Seules les excuses rejetées peuvent être resoumises.');
+
+            return $this->redirectToRoute('app_excuse_show', ['id' => $excuse->getId()]);
+        }
+
+        $excuse->setStatus('pending');
+        $excuse->setUpdatedAt(new \DateTimeImmutable());
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Excuse resoumise à validation.');
+
+        return $this->redirectToRoute('app_excuse_show', ['id' => $excuse->getId()]);
+    }
+
     private function createExcuseByType(string $type): Excuse
     {
         return match ($type) {
@@ -172,6 +203,28 @@ final class ExcuseController extends AbstractController
             $excuse instanceof ProfessionalExcuse => 'professional',
             default => '',
         };
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, string>
+     */
+    private function buildRejectionReasons(array $excuses, ExcuseValidationRepository $validationRepository): array
+    {
+        $excuseIds = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $excuseIds[] = $id;
+            }
+        }
+
+        if ([] === $excuseIds) {
+            return [];
+        }
+
+        return $validationRepository->findLatestRejectedCommentsByExcuseIds(array_values(array_unique($excuseIds)));
     }
 }
 
