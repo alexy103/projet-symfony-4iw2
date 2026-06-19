@@ -32,6 +32,10 @@ final class ExcuseController extends AbstractController
             'toneId' => $request->query->get('toneId', ''),
         ];
 
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $filters['status'] = 'validated';
+        }
+
         return $this->render('excuse/index.html.twig', [
             'excuses' => $excuseRepository->findByFilters($filters),
             'filters' => $filters,

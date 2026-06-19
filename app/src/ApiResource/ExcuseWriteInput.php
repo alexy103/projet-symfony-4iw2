@@ -18,10 +18,8 @@ final class ExcuseWriteInput
     #[Groups(['excuse:write'])]
     public ?int $urgencyLevel = null;
 
-    #[Groups(['excuse:write'])]
     public ?int $credibilityScore = null;
 
-    #[Groups(['excuse:write'])]
     public ?int $authorId = null;
 
     #[Groups(['excuse:write'])]
