@@ -31,6 +31,7 @@
                     <a href="{{ path('app_home') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Accueil</a>
 
                     {% if app.user %}
+                        <a href="{{ path('app_excuse_preview_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Excuses</a>
                         <a href="{{ path('app_tag_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Tags</a>
                         <a href="{{ path('app_badge_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Badges</a>
                         {% set unread_count = app.user.notifications|filter(n => not n.isRead)|length %}
