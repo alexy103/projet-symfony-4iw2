@@ -1,0 +1,32 @@
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+    <h2 class="font-bold text-lg text-slate-900 mb-3">Note</h2>
+
+    <div class="flex items-baseline gap-2">
+        {% if rating_stats.count > 0 %}
+            <span class="text-3xl font-extrabold text-slate-900">{{ rating_stats.average }}</span>
+            <span class="text-slate-400">/ 5</span>
+            <span class="text-sm text-slate-400">({{ rating_stats.count }} note{{ rating_stats.count > 1 ? 's' : '' }})</span>
+        {% else %}
+            <span class="text-sm text-slate-400">Pas encore de note.</span>
+        {% endif %}
+    </div>
+
+    {% if app.user %}
+        <form method="post" action="{{ path('app_excuse_rating_set', {id: excuse.id}) }}" class="mt-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('rate' ~ excuse.id) }}">
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-slate-500 mr-1">Votre note :</span>
+                {% for i in 1..5 %}
+                    {% set active = user_rating and user_rating.score >= i %}
+                    <button type="submit" name="score" value="{{ i }}"
+                            class="w-9 h-9 rounded-md text-sm font-semibold transition {{ active ? 'bg-amber-400 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                        {{ i }}
+                    </button>
+                {% endfor %}
+            </div>
+            {% if user_rating %}
+                <p class="text-xs text-slate-400 mt-2">Votre note actuelle : {{ user_rating.score }}/5 — cliquez pour la modifier.</p>
+            {% endif %}
+        </form>
+    {% endif %}
+</section>

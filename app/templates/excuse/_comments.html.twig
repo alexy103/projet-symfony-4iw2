@@ -1,0 +1,33 @@
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+    <h2 class="font-bold text-lg text-slate-900 mb-4">
+        Commentaires <span class="text-slate-400 font-normal">({{ comments|length }})</span>
+    </h2>
+
+    {% if app.user %}
+        {{ form_start(comment_form, {action: path('app_excuse_comment_add', {id: excuse.id})}) }}
+            {{ form_widget(comment_form.content, {attr: {
+                class: 'w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none',
+                rows: 2,
+                placeholder: 'Votre avis sur cette excuse…'
+            }}) }}
+            {{ form_errors(comment_form.content) }}
+            <div class="mt-2">
+                <button type="submit" class="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">Commenter</button>
+            </div>
+        {{ form_end(comment_form) }}
+    {% endif %}
+
+    <div class="mt-5 space-y-4">
+        {% for comment in comments %}
+            <div class="border-t border-slate-100 pt-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-slate-800">{{ comment.author.userIdentifier }}</span>
+                    <span class="text-xs text-slate-400">{{ comment.createdAt|date('d/m/Y à H:i') }}</span>
+                </div>
+                <p class="text-sm text-slate-600 mt-1 whitespace-pre-line">{{ comment.content }}</p>
+            </div>
+        {% else %}
+            <p class="text-sm text-slate-400">Aucun commentaire pour l'instant.</p>
+        {% endfor %}
+    </div>
+</section>
