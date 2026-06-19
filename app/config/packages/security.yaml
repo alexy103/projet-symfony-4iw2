@@ -38,7 +38,7 @@ security:
     access_control:
         - { path: ^/login$, roles: PUBLIC_ACCESS }
         - { path: ^/logout$, roles: ROLE_USER }
-        - { path: ^/validator, roles: ROLE_VALIDATOR }
+        - { path: ^/validator, roles: [ROLE_VALIDATOR, ROLE_ADMIN] }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/my-excuses, roles: ROLE_USER }
         - { path: ^/excuses, roles: ROLE_USER }

@@ -370,6 +370,9 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
   - `EXCUSE_EDIT`
   - `EXCUSE_DELETE`
   - `EXCUSE_VALIDATE`
+- Sur les routes validator, l'admin doit avoir les memes possibilites que le validator.
+- Les tests sont reportes a la fin du flux principal (rappel obligatoire avant cloture).
+- L'API sera implementee avec API Platform (choix valide car vu en cours).
 
 ### Avancement
 
@@ -378,6 +381,9 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 - Etape 3 terminee : methodes repository ajoutees dans `app/src/Repository/ExcuseRepository.php`.
 - Etape 4 terminee : `app/src/Controller/ExcuseController.php` + templates Twig du flux excuses.
 - Etape 5 terminee : `app/src/Controller/ValidatorExcuseController.php` + page Twig validator (pending, accept/reject, traçabilite `ExcuseValidation`).
+- Etape 6 terminee : API Platform installee + endpoints `GET /api/v1/excuses/{id}` et `GET /api/v1/excuses/random`.
+- Etape 7 terminee : `ApiResource` ajoute sur les entites exposees (`Excuse`, `ExcuseCategory`, `ExcuseContext`, `ExcuseTone`, `Tag`) en lecture.
+- Etape 8 terminee : suppression complete de Nelmio CORS (`.env`, `bundles.php`, recette Flex, lockfiles) et verification Symfony OK.
 
 ### Prochaine etape
 
@@ -385,3 +391,43 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
   - un user non validator ne peut pas valider
   - un validator peut valider uniquement les excuses `pending`
   - controle des acces sur les routes validator.
+- Ajouter ensuite le connecteur meteo via HttpClient et brancher une generation d'excuse simple basee meteo.
+
+## Ce qu'il manque encore (checklist finale)
+
+### Bloc prioritaire fin de flux principal
+
+- [ ] Tests fonctionnels de securite (a faire en fin de flux principal, rappel obligatoire).
+- [ ] Verification complete du flux : creation excuse -> pending -> validation/rejet -> droits Voter.
+
+### API (strategie retenue)
+
+- [x] Mettre en place API Platform (choix valide car vu en cours).
+- [ ] Exposer les endpoints API minimaux du sujet :
+  - [x] `GET /api/v1/excuses/random`
+  - [x] `GET /api/v1/excuses/{id}`
+- [ ] Configurer les groupes Serializer (`excuse:read`, `excuse:write`, `user:read`, `tag:read`).
+
+### API externe meteo (idee retenue)
+
+- [ ] Ajouter un service de consommation API meteo (HttpClient Symfony).
+- [ ] Ajouter une route API/metier simple basee meteo (ex: generation d'excuse selon la ville/la meteo).
+- [ ] Gerer proprement les erreurs reseau/timeouts et fallback message.
+
+### Notifications et mails
+
+- [ ] Brancher Mailer/Notifier sur les evenements cles (soumission, validation, rejet, badge).
+
+### Qualite et outillage
+
+- [ ] Ajouter PHPUnit (le package n'est pas encore present dans `composer.json`).
+- [ ] Creer au moins 1 test unitaire + 1 test fonctionnel conformes au sujet.
+- [ ] Ajouter PHPStan (config + niveau cible) et corriger les erreurs critiques.
+- [ ] Ajouter pipeline CI (lint container/twig/yaml + phpstan + tests).
+
+### Livrables de cloture
+
+- [ ] Verifier la coherence des fixtures avec le flux final.
+- [ ] Verifier les droits ROLE_USER / ROLE_VALIDATOR / ROLE_ADMIN sur toutes les routes critiques.
+- [ ] Faire une passe de recette finale avant merge (routes, formulaires, suppression, validation).
+
