@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle excuse{% endblock %}
+
+{% block body %}
+    <h1 class="text-2xl font-bold mb-6">Choisir un type d'excuse</h1>
+
+    <div class="grid md:grid-cols-3 gap-4">
+        <a href="{{ path('app_excuse_new_type', {'type': 'classic'}) }}" class="p-4 bg-white border rounded-lg hover:border-indigo-400 transition">
+            <h2 class="font-semibold">ClassicExcuse</h2>
+            <p class="text-sm text-slate-600 mt-1">Excuse du quotidien.</p>
+        </a>
+        <a href="{{ path('app_excuse_new_type', {'type': 'emergency'}) }}" class="p-4 bg-white border rounded-lg hover:border-indigo-400 transition">
+            <h2 class="font-semibold">EmergencyExcuse</h2>
+            <p class="text-sm text-slate-600 mt-1">Excuse urgente ou dramatique.</p>
+        </a>
+        <a href="{{ path('app_excuse_new_type', {'type': 'professional'}) }}" class="p-4 bg-white border rounded-lg hover:border-indigo-400 transition">
+            <h2 class="font-semibold">ProfessionalExcuse</h2>
+            <p class="text-sm text-slate-600 mt-1">Excuse orientée travail.</p>
+        </a>
+    </div>
+{% endblock %}
+

@@ -373,4 +373,15 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 
 ### Avancement
 
-- Etape 1 en cours : implementation de `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 1 terminee : `app/src/Security/Voter/ExcuseVoter.php` implemente.
+- Etape 2 terminee : securisation minimale des routes dans `app/config/packages/security.yaml`.
+- Etape 3 terminee : methodes repository ajoutees dans `app/src/Repository/ExcuseRepository.php`.
+- Etape 4 terminee : `app/src/Controller/ExcuseController.php` + templates Twig du flux excuses.
+- Etape 5 terminee : `app/src/Controller/ValidatorExcuseController.php` + page Twig validator (pending, accept/reject, traçabilite `ExcuseValidation`).
+
+### Prochaine etape
+
+- Ajouter des tests fonctionnels de securite :
+  - un user non validator ne peut pas valider
+  - un validator peut valider uniquement les excuses `pending`
+  - controle des acces sur les routes validator.

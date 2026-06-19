@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail excuse{% endblock %}
+
+{% block body %}
+    <div class="flex items-center justify-between mb-4">
+        <h1 class="text-2xl font-bold">{{ excuse.title }}</h1>
+        <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
+    </div>
+
+    <div class="bg-white border rounded-lg p-4 space-y-3">
+        <p><span class="font-semibold">Auteur :</span> {{ excuse.author.email }}</p>
+        <p><span class="font-semibold">Catégorie :</span> {{ excuse.category.name }}</p>
+        <p><span class="font-semibold">Contexte :</span> {{ excuse.context.name }}</p>
+        <p><span class="font-semibold">Ton :</span> {{ excuse.tone.name }}</p>
+        <p><span class="font-semibold">Urgence :</span> {{ excuse.urgencyLevel }}</p>
+        <p><span class="font-semibold">Contenu :</span></p>
+        <p class="text-slate-700">{{ excuse.content }}</p>
+    </div>
+
+    <div class="mt-4 flex gap-3">
+        <a href="{{ path('app_my_excuses') }}" class="px-4 py-2 rounded-md bg-slate-200 hover:bg-slate-300">Retour</a>
+        {% if is_granted('EXCUSE_EDIT', excuse) %}
+            <a href="{{ path('app_excuse_edit', {'id': excuse.id}) }}" class="px-4 py-2 rounded-md bg-amber-500 text-white hover:bg-amber-600">Modifier</a>
+        {% endif %}
+        {% if is_granted('EXCUSE_DELETE', excuse) %}
+            <form method="post" action="{{ path('app_excuse_delete', {'id': excuse.id}) }}" onsubmit="return confirm('Confirmer la suppression ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ excuse.id) }}">
+                <button class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700" type="submit">Supprimer</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+

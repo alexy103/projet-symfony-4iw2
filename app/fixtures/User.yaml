@@ -1,7 +1,7 @@
 App\Entity\User:
     user_admin:
         email: 'admin@excusify.test'
-        roles: ['ROLE_ADMIN']
+        roles: ['ROLE_ADMIN', 'ROLE_VALIDATOR']
         passwordHash: '\$2y\$13\$hGLE3CmlIbmK1X4EdoI6qOTvUSpaR9A/kijY8UhuwFIyEYfdFbRPq'
         badges: ['@badge_validateur']
 
