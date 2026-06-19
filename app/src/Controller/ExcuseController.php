@@ -127,6 +127,25 @@ final class ExcuseController extends AbstractController
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_DELETE, $excuse);
 
         if ($this->isCsrfTokenValid('delete'.$excuse->getId(), $request->getPayload()->getString('_token'))) {
+            foreach ($excuse->getComments()->toArray() as $comment) {
+                $excuse->removeComment($comment);
+                $entityManager->remove($comment);
+            }
+
+            foreach ($excuse->getRatings()->toArray() as $rating) {
+                $excuse->removeRating($rating);
+                $entityManager->remove($rating);
+            }
+
+            foreach ($excuse->getValidations()->toArray() as $validation) {
+                $excuse->removeValidation($validation);
+                $entityManager->remove($validation);
+            }
+
+            foreach ($excuse->getTags()->toArray() as $tag) {
+                $excuse->removeTag($tag);
+            }
+
             $entityManager->remove($excuse);
             $entityManager->flush();
             $this->addFlash('success', 'Excuse supprimée.');

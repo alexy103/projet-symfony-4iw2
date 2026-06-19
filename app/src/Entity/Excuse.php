@@ -85,19 +85,19 @@ abstract class Excuse
     /**
      * @var Collection<int, ExcuseComment>
      */
-    #[ORM\OneToMany(targetEntity: ExcuseComment::class, mappedBy: 'excuse', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ExcuseComment::class, mappedBy: 'excuse')]
     private Collection $comments;
 
     /**
      * @var Collection<int, ExcuseRating>
      */
-    #[ORM\OneToMany(targetEntity: ExcuseRating::class, mappedBy: 'excuse', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ExcuseRating::class, mappedBy: 'excuse')]
     private Collection $ratings;
 
     /**
      * @var Collection<int, ExcuseValidation>
      */
-    #[ORM\OneToMany(targetEntity: ExcuseValidation::class, mappedBy: 'excuse', cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ExcuseValidation::class, mappedBy: 'excuse')]
     private Collection $validations;
 
     /**
@@ -272,12 +272,7 @@ abstract class Excuse
 
     public function removeComment(ExcuseComment $comment): static
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getExcuse() === $this) {
-                $comment->setExcuse(null);
-            }
-        }
+        $this->comments->removeElement($comment);
 
         return $this;
     }
@@ -302,12 +297,7 @@ abstract class Excuse
 
     public function removeRating(ExcuseRating $rating): static
     {
-        if ($this->ratings->removeElement($rating)) {
-            // set the owning side to null (unless already changed)
-            if ($rating->getExcuse() === $this) {
-                $rating->setExcuse(null);
-            }
-        }
+        $this->ratings->removeElement($rating);
 
         return $this;
     }
@@ -332,12 +322,7 @@ abstract class Excuse
 
     public function removeValidation(ExcuseValidation $validation): static
     {
-        if ($this->validations->removeElement($validation)) {
-            // set the owning side to null (unless already changed)
-            if ($validation->getExcuse() === $this) {
-                $validation->setExcuse(null);
-            }
-        }
+        $this->validations->removeElement($validation);
 
         return $this;
     }
