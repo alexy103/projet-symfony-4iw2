@@ -889,4 +889,6 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - Etape 8 terminee : suppression de `nelmio/cors-bundle` (config, bundle, recettes Flex et lockfiles) avec verification `lint:container` OK.
 - Prochaine etape : integration meteo via HttpClient puis tests fonctionnels de securite en fin de flux.
 
+- Prochaine etape : tests fonctionnels de securite sur les droits (voter + routes validator).
+
 

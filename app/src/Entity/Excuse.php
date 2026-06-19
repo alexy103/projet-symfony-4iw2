@@ -85,19 +85,19 @@ abstract class Excuse
     /**
      * @var Collection<int, ExcuseComment>
      */
-    #[ORM\OneToMany(targetEntity: ExcuseComment::class, mappedBy: 'excuse')]
+    #[ORM\OneToMany(targetEntity: ExcuseComment::class, mappedBy: 'excuse', cascade: ['remove'], orphanRemoval: true)]
     private Collection $comments;
 
     /**
      * @var Collection<int, ExcuseRating>
      */
-    #[ORM\OneToMany(targetEntity: ExcuseRating::class, mappedBy: 'excuse')]
+    #[ORM\OneToMany(targetEntity: ExcuseRating::class, mappedBy: 'excuse', cascade: ['remove'], orphanRemoval: true)]
     private Collection $ratings;
 
     /**
      * @var Collection<int, ExcuseValidation>
      */
-    #[ORM\OneToMany(targetEntity: ExcuseValidation::class, mappedBy: 'excuse')]
+    #[ORM\OneToMany(targetEntity: ExcuseValidation::class, mappedBy: 'excuse', cascade: ['remove'], orphanRemoval: true)]
     private Collection $validations;
 
     /**

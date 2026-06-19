@@ -96,3 +96,4 @@ class ExcuseValidation
         return $this;
     }
 }
+

@@ -31,6 +31,11 @@
                     <a href="{{ path('app_home') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Accueil</a>
 
                     {% if app.user %}
+                        <a href="{{ path('app_excuse_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Excuses</a>
+                        <a href="{{ path('app_my_excuses') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Mes excuses</a>
+                        {% if is_granted('ROLE_VALIDATOR') or is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_validator_excuses') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Validation</a>
+                        {% endif %}
                         <a href="{{ path('app_tag_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Tags</a>
                         <a href="{{ path('app_badge_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Badges</a>
                         {% set unread_count = app.user.notifications|filter(n => not n.isRead)|length %}
