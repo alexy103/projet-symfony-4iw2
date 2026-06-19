@@ -5,7 +5,10 @@ namespace App\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Excuse;
+use App\State\ExcuseWriteProcessor;
 use App\State\ExcuseItemProvider;
 use App\State\RandomExcuseProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -23,6 +26,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/v1/excuses/random',
             provider: RandomExcuseProvider::class,
             normalizationContext: ['groups' => ['excuse:read', 'user:read', 'tag:read']]
+        ),
+        new Post(
+            uriTemplate: '/v1/excuses',
+            read: false,
+            input: ExcuseWriteInput::class,
+            processor: ExcuseWriteProcessor::class,
+            normalizationContext: ['groups' => ['excuse:read', 'user:read', 'tag:read']],
+            denormalizationContext: ['groups' => ['excuse:write']]
+        ),
+        new Patch(
+            uriTemplate: '/v1/excuses/{id}',
+            requirements: ['id' => '\\d+'],
+            read: false,
+            input: ExcuseWriteInput::class,
+            processor: ExcuseWriteProcessor::class,
+            normalizationContext: ['groups' => ['excuse:read', 'user:read', 'tag:read']],
+            denormalizationContext: ['groups' => ['excuse:write']]
         ),
     ]
 )]
