@@ -18,26 +18,26 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new GetCollection(uriTemplate: '/v1/entities/excuse-tones'),
         new Get(uriTemplate: '/v1/entities/excuse-tones/{id}', requirements: ['id' => '\\d+']),
     ],
-    normalizationContext: ['groups' => ['entity:reference:read']]
+    normalizationContext: ['groups' => ['excuse:read']]
 )]
 class ExcuseTone
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['entity:reference:read', 'entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['entity:reference:read', 'entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['entity:reference:read'])]
+    #[Groups(['excuse:read'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['entity:reference:read'])]
+    #[Groups(['excuse:read'])]
     private ?int $riskLevel = null;
 
     /**
