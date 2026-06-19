@@ -18,4 +18,3 @@ App\Entity\Badge:
         name: 'Validateur impitoyable'
         description: 'A traité des excuses en attente avec rigueur.'
         icon: 'badge-validateur.svg'
-

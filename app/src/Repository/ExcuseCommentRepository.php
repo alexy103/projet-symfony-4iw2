@@ -31,4 +31,3 @@ class ExcuseCommentRepository extends ServiceEntityRepository
             ->getResult();
     }
 }
-

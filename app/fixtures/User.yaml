@@ -1,24 +1,24 @@
 App\Entity\User:
     user_admin:
         email: 'admin@excusify.test'
-        roles: ['ROLE_ADMIN']
-        passwordHash: '\$2y\$13\$mZL5CItwRH1FlCn0qQeobeT0q91gIu8P1RZbQl2Y3OUQxEFlNj8nO'
+        roles: ['ROLE_ADMIN', 'ROLE_VALIDATOR']
+        passwordHash: '\$2y\$13\$hGLE3CmlIbmK1X4EdoI6qOTvUSpaR9A/kijY8UhuwFIyEYfdFbRPq'
         badges: ['@badge_validateur']
 
     user_validator:
         email: 'validator@excusify.test'
         roles: ['ROLE_VALIDATOR']
-        passwordHash: '\$2y\$13\$mZL5CItwRH1FlCn0qQeobeT0q91gIu8P1RZbQl2Y3OUQxEFlNj8nO'
+        passwordHash: '\$2y\$13\$hGLE3CmlIbmK1X4EdoI6qOTvUSpaR9A/kijY8UhuwFIyEYfdFbRPq'
         badges: ['@badge_validateur', '@badge_improvisation']
 
     user_alex:
         email: 'alex@excusify.test'
         roles: ['ROLE_USER']
-        passwordHash: '\$2y\$13\$mZL5CItwRH1FlCn0qQeobeT0q91gIu8P1RZbQl2Y3OUQxEFlNj8nO'
+        passwordHash: '\$2y\$13\$hGLE3CmlIbmK1X4EdoI6qOTvUSpaR9A/kijY8UhuwFIyEYfdFbRPq'
         badges: ['@badge_mytho_debutant', '@badge_retardataire']
 
     user_sam:
         email: 'sam@excusify.test'
         roles: ['ROLE_USER']
-        passwordHash: '\$2y\$13\$mZL5CItwRH1FlCn0qQeobeT0q91gIu8P1RZbQl2Y3OUQxEFlNj8nO'
+        passwordHash: '\$2y\$13\$hGLE3CmlIbmK1X4EdoI6qOTvUSpaR9A/kijY8UhuwFIyEYfdFbRPq'
         badges: ['@badge_mytho_debutant']

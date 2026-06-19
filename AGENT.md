@@ -601,7 +601,6 @@ Endpoints possibles :
 ```txt
 GET /api/v1/excuses/random
 GET /api/v1/excuses/{id}
-POST /api/v1/excuses/generate
 ```
 
 L’API doit utiliser le Serializer Symfony avec des groupes de normalisation.
@@ -853,3 +852,43 @@ Excuse
 ```
 
 Les autres entités doivent être ajoutées progressivement, une fois que la création et l’affichage d’excuses fonctionnent correctement.
+
+## Suivi de mise en oeuvre (partage equipe)
+
+Cette section est maintenue au fil des echanges pour aligner tous les collaborateurs.
+
+### Decisions validees
+
+- Le projet doit coller au maximum au sujet de cours pour viser une bonne note.
+- Le Voter personnalise est obligatoire et prioritaire dans le flux metier.
+- L'API du projet est implementee avec API Platform.
+- Les permissions cibles de `ExcuseVoter` sont :
+  - `EXCUSE_VIEW`
+  - `EXCUSE_EDIT`
+  - `EXCUSE_DELETE`
+  - `EXCUSE_VALIDATE`
+
+### Regles Voter retenues
+
+- `ROLE_ADMIN` peut tout faire.
+- `EXCUSE_EDIT` : auteur uniquement, statut `draft` ou `rejected`.
+- `EXCUSE_DELETE` : auteur uniquement, si statut different de `validated`.
+- `EXCUSE_VALIDATE` : `ROLE_VALIDATOR` uniquement, et excuse en `pending`.
+- `EXCUSE_VIEW` : auteur, validateur et admin.
+- Les routes `/validator` sont accessibles a `ROLE_VALIDATOR` et `ROLE_ADMIN`.
+
+### Etat d'avancement
+
+- Etape 1 terminee : `ExcuseVoter` implemente dans `app/src/Security/Voter/ExcuseVoter.php`.
+- Etape 2 terminee : regles `access_control` minimales ajoutees dans `app/config/packages/security.yaml`.
+- Etape 3 terminee : methodes metier ajoutees dans `app/src/Repository/ExcuseRepository.php` (`findPendingExcuses`, `findUserExcuses`, `findValidatedExcuses`, `findByFilters`).
+- Etape 4 terminee : `ExcuseController` ajoute avec pages Twig minimales (liste, detail, mes excuses, creation, edition, suppression) et integration du Voter.
+- Etape 5 terminee : flux validator ajoute (`/validator/excuses`, actions accept/reject) avec creation d'entrees `ExcuseValidation`.
+- Etape 6 terminee : API Platform installee et endpoints API v1 excuses disponibles (`/api/v1/excuses/{id}`, `/api/v1/excuses/random`).
+- Etape 7 terminee : ressources API ajoutees directement sur les entites exposees (`Excuse`, `ExcuseCategory`, `ExcuseContext`, `ExcuseTone`, `Tag`).
+- Etape 8 terminee : suppression de `nelmio/cors-bundle` (config, bundle, recettes Flex et lockfiles) avec verification `lint:container` OK.
+- Prochaine etape : integration meteo via HttpClient puis tests fonctionnels de securite en fin de flux.
+
+- Prochaine etape : tests fonctionnels de securite sur les droits (voter + routes validator).
+
+

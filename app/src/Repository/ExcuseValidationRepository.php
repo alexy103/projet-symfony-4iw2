@@ -16,4 +16,3 @@ class ExcuseValidationRepository extends ServiceEntityRepository
         parent::__construct($registry, ExcuseValidation::class);
     }
 }
-

@@ -22,4 +22,3 @@ App\Entity\ExcuseRating:
         author: '@user_admin'
         score: 3
         createdAt: <(new \DateTimeImmutable('2026-06-13 16:00:00'))>
-

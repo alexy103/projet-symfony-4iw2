@@ -41,4 +41,3 @@ class ExcuseRatingRepository extends ServiceEntityRepository
         ];
     }
 }
-
