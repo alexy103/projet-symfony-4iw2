@@ -25,42 +25,42 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new GetCollection(uriTemplate: '/v1/entities/excuses'),
         new Get(uriTemplate: '/v1/entities/excuses/{id}', requirements: ['id' => '\\d+']),
     ],
-    normalizationContext: ['groups' => ['entity:excuse:read']]
+    normalizationContext: ['groups' => ['excuse:read']]
 )]
 abstract class Excuse
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?string $status = null;
 
     #[ORM\Column]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?int $urgencyLevel = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?int $credibilityScore = null;
 
     #[ORM\Column]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'excuses')]
@@ -69,17 +69,17 @@ abstract class Excuse
 
     #[ORM\ManyToOne(inversedBy: 'excuses')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?ExcuseContext $context = null;
 
     #[ORM\ManyToOne(inversedBy: 'excuses')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?ExcuseCategory $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'excuses')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['entity:excuse:read'])]
+    #[Groups(['excuse:read'])]
     private ?ExcuseTone $tone = null;
 
     /**

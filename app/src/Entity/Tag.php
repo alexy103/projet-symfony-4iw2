@@ -17,22 +17,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new GetCollection(uriTemplate: '/v1/entities/tags'),
         new Get(uriTemplate: '/v1/entities/tags/{id}', requirements: ['id' => '\\d+']),
     ],
-    normalizationContext: ['groups' => ['entity:tag:read']]
+    normalizationContext: ['groups' => ['tag:read']]
 )]
 class Tag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['entity:tag:read'])]
+    #[Groups(['tag:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['entity:tag:read'])]
+    #[Groups(['tag:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 30, nullable: true)]
-    #[Groups(['entity:tag:read'])]
+    #[Groups(['tag:read'])]
     private ?string $color = null;
 
     #[ORM\ManyToOne]
