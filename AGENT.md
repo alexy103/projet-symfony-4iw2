@@ -867,6 +867,11 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
   - `EXCUSE_EDIT`
   - `EXCUSE_DELETE`
   - `EXCUSE_VALIDATE`
+- Les routes `/validator` restent accessibles a `ROLE_VALIDATOR` et `ROLE_ADMIN`.
+- Les endpoints API d'ecriture (`POST/PATCH`) exigent une authentification (`ROLE_USER`).
+- L'auteur d'une excuse API est force cote serveur (utilisateur connecte), jamais par payload.
+- `credibilityScore` est calcule automatiquement par l'application.
+- L'endpoint random API ne renvoie que des excuses `validated`.
 
 ### Regles Voter retenues
 
@@ -876,6 +881,7 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - `EXCUSE_VALIDATE` : `ROLE_VALIDATOR` uniquement, et excuse en `pending`.
 - `EXCUSE_VIEW` : auteur, validateur et admin.
 - Les routes `/validator` sont accessibles a `ROLE_VALIDATOR` et `ROLE_ADMIN`.
+- Les excuses non validees ne sont pas exposees publiquement dans les vues front/API publiques.
 
 ### Etat d'avancement
 
@@ -887,8 +893,19 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - Etape 6 terminee : API Platform installee et endpoints API v1 excuses disponibles (`/api/v1/excuses/{id}`, `/api/v1/excuses/random`).
 - Etape 7 terminee : ressources API ajoutees directement sur les entites exposees (`Excuse`, `ExcuseCategory`, `ExcuseContext`, `ExcuseTone`, `Tag`).
 - Etape 8 terminee : suppression de `nelmio/cors-bundle` (config, bundle, recettes Flex et lockfiles) avec verification `lint:container` OK.
-- Prochaine etape : integration meteo via HttpClient puis tests fonctionnels de securite en fin de flux.
+- Etape 9 terminee : durcissement API write (`POST/PATCH` authentifies), auteur force via utilisateur connecte, blocage du changement d'auteur par payload.
+- Etape 10 terminee : score `credibilityScore` calcule automatiquement via `CredibilityScoreService` et applique au create/update API.
+- Etape 11 terminee : endpoint random limite aux excuses `validated`.
+- Etape 12 terminee : ajustements front/profil pour distinguer "mes excuses" et liste publique des excuses validees.
+- Etape 13 terminee : ajout de l'acces global a `/my-excuses` (onglet "Mes excuses") et affichage du statut de commentaires recus sur les excuses validees de l'auteur.
 
-- Prochaine etape : tests fonctionnels de securite sur les droits (voter + routes validator).
+### Prochaines etapes prioritaires
+
+- Ajouter les tests minimum obligatoires du sujet :
+  - 1 test unitaire (`CredibilityScoreService`).
+  - 1 test fonctionnel (droits API + flux validator).
+- Ajouter l'integration API externe via HttpClient (ex: meteo) avec gestion d'erreurs/fallback.
+- Brancher Mailer/Notifier sur les evenements cle (soumission, validation, rejet).
+- Mettre en place l'outillage qualite manquant : PHPUnit, PHPStan, pipeline CI (lint + analyse statique + tests).
 
 

@@ -17,8 +17,9 @@
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <h2 class="font-semibold">{{ excuse.title }}</h2>
+                            {% set lastActivityAt = excuse.updatedAt ?? excuse.createdAt %}
                             <p class="text-sm text-slate-600 mt-1">
-                                Par {{ excuse.author.email }} — {{ excuse.createdAt|date('d/m/Y H:i') }}
+                                Par {{ excuse.author.email }} — {{ lastActivityAt|date('d/m/Y H:i') }}
                             </p>
                         </div>
                         <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="text-indigo-600 hover:underline text-sm">Voir</a>

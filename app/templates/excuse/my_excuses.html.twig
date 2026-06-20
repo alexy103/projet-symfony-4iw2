@@ -18,7 +18,23 @@
                         <h2 class="font-semibold">{{ excuse.title }}</h2>
                         <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
                     </div>
-                    <p class="text-sm text-slate-600 mt-1">{{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                    <p class="text-sm text-slate-600 mt-1">
+                        {% if excuse.updatedAt %}
+                            Dernière mise à jour : {{ excuse.updatedAt|date('d/m/Y H:i') }}
+                        {% else %}
+                            Créée le : {{ excuse.createdAt|date('d/m/Y H:i') }}
+                        {% endif %}
+                    </p>
+                    {% if excuse.status == 'validated' %}
+                        {% set commentsCount = commentCounts[excuse.id]|default(0) %}
+                        <p class="mt-2 text-sm {{ commentsCount > 0 ? 'text-green-700 bg-green-50 border-green-200' : 'text-slate-600 bg-slate-50 border-slate-200' }} border rounded p-2">
+                            {% if commentsCount > 0 %}
+                                <span class="font-semibold">Commentaires reçus :</span> {{ commentsCount }}
+                            {% else %}
+                                Aucun commentaire pour le moment.
+                            {% endif %}
+                        </p>
+                    {% endif %}
                     {% if excuse.status == 'rejected' %}
                         {% set reason = rejectionReasons[excuse.id]|default(null) %}
                         <p class="mt-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded p-2">

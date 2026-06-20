@@ -80,6 +80,16 @@
                                     <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
                                 </div>
                                 <p class="text-sm text-slate-600 mt-1">{{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                                {% if excuse.status == 'validated' %}
+                                    {% set commentsCount = myExcuseCommentCounts[excuse.id]|default(0) %}
+                                    <p class="mt-2 text-xs {{ commentsCount > 0 ? 'text-green-700' : 'text-slate-500' }}">
+                                        {% if commentsCount > 0 %}
+                                            {{ commentsCount }} commentaire{{ commentsCount > 1 ? 's' : '' }} reçu{{ commentsCount > 1 ? 's' : '' }}.
+                                        {% else %}
+                                            Aucun commentaire pour le moment.
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
                                 <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="inline-block mt-2 text-indigo-600 hover:underline text-sm">Voir le détail</a>
                             </article>
                         {% endfor %}

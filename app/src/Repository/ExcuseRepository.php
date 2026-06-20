@@ -29,7 +29,8 @@ class ExcuseRepository extends ServiceEntityRepository
             ->leftJoin('e.tone', 't')->addSelect('t')
             ->andWhere('e.status = :status')
             ->setParameter('status', 'pending')
-            ->orderBy('e.createdAt', 'DESC')
+            ->addSelect('COALESCE(e.updatedAt, e.createdAt) AS HIDDEN lastActivityAt')
+            ->orderBy('lastActivityAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -45,7 +46,8 @@ class ExcuseRepository extends ServiceEntityRepository
             ->leftJoin('e.tone', 't')->addSelect('t')
             ->andWhere('e.author = :author')
             ->setParameter('author', $user)
-            ->orderBy('e.createdAt', 'DESC')
+            ->addSelect('COALESCE(e.updatedAt, e.createdAt) AS HIDDEN lastActivityAt')
+            ->orderBy('lastActivityAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
