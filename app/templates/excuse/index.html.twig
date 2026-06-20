@@ -17,10 +17,8 @@
                     <option value="{{ s }}" {% if filters.status|default('') == s %}selected{% endif %}>{{ s }}</option>
                 {% endfor %}
             </select>
-        {% else %}
-            <input type="hidden" name="status" value="validated">
-            <div class="border rounded px-3 py-2 text-sm text-slate-600 bg-slate-50">Affichage public : excuses validées</div>
         {% endif %}
+
         <button class="px-4 py-2 rounded-md bg-slate-800 text-white">Filtrer</button>
         <a href="{{ path('app_excuse_index') }}" class="px-4 py-2 rounded-md bg-slate-200 text-center">Réinitialiser</a>
     </form>

@@ -28,6 +28,24 @@
         {% endif %}
     </div>
 
+    {% if is_granted('EXCUSE_VALIDATE', excuse) %}
+        <div class="mt-4 grid md:grid-cols-2 gap-3">
+            <form method="post" action="{{ path('app_validator_excuse_accept', {'id': excuse.id}) }}" class="p-3 border rounded-md bg-green-50">
+                <input type="hidden" name="_token" value="{{ csrf_token('accept' ~ excuse.id) }}">
+                <label class="text-sm font-medium text-green-900" for="accept_comment_show_{{ excuse.id }}">Commentaire (optionnel)</label>
+                <textarea id="accept_comment_show_{{ excuse.id }}" name="comment" rows="2" class="w-full mt-1 border rounded px-2 py-1"></textarea>
+                <button type="submit" class="mt-2 px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition">Accepter</button>
+            </form>
+
+            <form method="post" action="{{ path('app_validator_excuse_reject', {'id': excuse.id}) }}" class="p-3 border rounded-md bg-red-50">
+                <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ excuse.id) }}">
+                <label class="text-sm font-medium text-red-900" for="reject_comment_show_{{ excuse.id }}">Motif du rejet (optionnel)</label>
+                <textarea id="reject_comment_show_{{ excuse.id }}" name="comment" rows="2" class="w-full mt-1 border rounded px-2 py-1"></textarea>
+                <button type="submit" class="mt-2 px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition">Rejeter</button>
+            </form>
+        </div>
+    {% endif %}
+
     <div class="mt-4 flex gap-3">
         <a href="{{ path('app_my_excuses') }}" class="px-4 py-2 rounded-md bg-slate-200 hover:bg-slate-300">Retour</a>
         {% if is_granted('EXCUSE_EDIT', excuse) %}
