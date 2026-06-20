@@ -13,10 +13,13 @@
     {% else %}
         <div class="space-y-3">
             {% for excuse in excuses %}
-                <article class="p-4 bg-white border rounded-lg">
-                    <div class="flex items-center justify-between gap-2">
+                <article class="relative p-4 bg-white border rounded-lg">
+                    <div class="absolute top-4 right-4">
+                        {{ include('excuse/_type_badge.html.twig', {type: excuseTypes[excuse.id]|default('')}) }}
+                    </div>
+                    <div class="flex items-center gap-2 pr-32">
                         <h2 class="font-semibold">{{ excuse.title }}</h2>
-                        <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
+                        {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
                     </div>
                     <p class="text-sm text-slate-600 mt-1">
                         {% if excuse.updatedAt %}

@@ -28,6 +28,7 @@ final class ExcuseController extends AbstractController
         $filters = [
             'status' => $request->query->get('status', ''),
             'keyword' => $request->query->get('q', ''),
+            'type' => $request->query->get('type', ''),
             'categoryId' => $request->query->get('categoryId', ''),
             'contextId' => $request->query->get('contextId', ''),
             'toneId' => $request->query->get('toneId', ''),
@@ -37,8 +38,11 @@ final class ExcuseController extends AbstractController
             $filters['status'] = 'validated';
         }
 
+        $excuses = $excuseRepository->findByFilters($filters);
+
         return $this->render('excuse/index.html.twig', [
-            'excuses' => $excuseRepository->findByFilters($filters),
+            'excuses' => $excuses,
+            'excuseTypes' => $this->buildExcuseTypes($excuses),
             'filters' => $filters,
         ]);
     }
@@ -57,6 +61,7 @@ final class ExcuseController extends AbstractController
 
         return $this->render('excuse/my_excuses.html.twig', [
             'excuses' => $excuses,
+            'excuseTypes' => $this->buildExcuseTypes($excuses),
             'rejectionReasons' => $this->buildRejectionReasons($excuses, $validationRepository),
             'commentCounts' => $this->buildCommentCounts($excuses, $commentRepository),
         ]);
@@ -109,6 +114,7 @@ final class ExcuseController extends AbstractController
 
         return $this->render('excuse/show.html.twig', [
             'excuse' => $excuse,
+            'excuseType' => $this->resolveType($excuse),
             'rejectionReason' => $rejectionReasons[$excuse->getId() ?? 0] ?? null,
         ]);
     }
@@ -213,6 +219,24 @@ final class ExcuseController extends AbstractController
             $excuse instanceof ProfessionalExcuse => 'professional',
             default => '',
         };
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, string>
+     */
+    private function buildExcuseTypes(array $excuses): array
+    {
+        $types = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $types[$id] = $this->resolveType($excuse);
+            }
+        }
+
+        return $types;
     }
 
     /**

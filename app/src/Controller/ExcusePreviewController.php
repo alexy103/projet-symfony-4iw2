@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\ClassicExcuse;
+use App\Entity\EmergencyExcuse;
 use App\Entity\Excuse;
+use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Form\ExcuseCommentType;
 use App\Repository\ExcuseCommentRepository;
@@ -21,9 +24,11 @@ final class ExcusePreviewController extends AbstractController
     public function index(ExcuseRepository $excuseRepository): Response
     {
         $criteria = $this->isGranted('ROLE_ADMIN') ? [] : ['status' => 'validated'];
+        $excuses = $excuseRepository->findBy($criteria, ['createdAt' => 'DESC']);
 
         return $this->render('excuse/preview_index.html.twig', [
-            'excuses' => $excuseRepository->findBy($criteria, ['createdAt' => 'DESC']),
+            'excuses' => $excuses,
+            'excuseTypes' => $this->buildExcuseTypes($excuses),
         ]);
     }
 
@@ -39,10 +44,39 @@ final class ExcusePreviewController extends AbstractController
 
         return $this->render('excuse/preview_show.html.twig', [
             'excuse' => $excuse,
+            'excuseType' => $this->resolveType($excuse),
             'comments' => $commentRepository->findForExcuse($excuse),
             'comment_form' => $this->createForm(ExcuseCommentType::class)->createView(),
             'rating_stats' => $ratingRepository->getStatsForExcuse($excuse),
             'user_rating' => null !== $user ? $ratingRepository->findOneByExcuseAndAuthor($excuse, $user) : null,
         ]);
+    }
+
+    private function resolveType(Excuse $excuse): string
+    {
+        return match (true) {
+            $excuse instanceof ClassicExcuse => 'classic',
+            $excuse instanceof EmergencyExcuse => 'emergency',
+            $excuse instanceof ProfessionalExcuse => 'professional',
+            default => '',
+        };
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, string>
+     */
+    private function buildExcuseTypes(array $excuses): array
+    {
+        $types = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $types[$id] = $this->resolveType($excuse);
+            }
+        }
+
+        return $types;
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\ClassicExcuse;
+use App\Entity\EmergencyExcuse;
 use App\Entity\Excuse;
+use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -87,6 +90,18 @@ class ExcuseRepository extends ServiceEntityRepository
         if (!empty($filters['status'])) {
             $qb->andWhere('e.status = :status')
                 ->setParameter('status', (string) $filters['status']);
+        }
+
+        if (!empty($filters['type'])) {
+            $type = mb_strtolower((string) $filters['type']);
+
+            if ('classic' === $type) {
+                $qb->andWhere(sprintf('e INSTANCE OF %s', ClassicExcuse::class));
+            } elseif ('emergency' === $type) {
+                $qb->andWhere(sprintf('e INSTANCE OF %s', EmergencyExcuse::class));
+            } elseif ('professional' === $type) {
+                $qb->andWhere(sprintf('e INSTANCE OF %s', ProfessionalExcuse::class));
+            }
         }
 
         if (!empty($filters['authorId'])) {

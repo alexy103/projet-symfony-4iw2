@@ -4,8 +4,11 @@
 
 {% block body %}
     <div class="flex items-center justify-between mb-4">
-        <h1 class="text-2xl font-bold">{{ excuse.title }}</h1>
-        <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
+        <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-bold">{{ excuse.title }}</h1>
+            {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+        </div>
+        {{ include('excuse/_type_badge.html.twig', {type: excuseType|default('')}) }}
     </div>
 
     <div class="bg-white border rounded-lg p-4 space-y-3">

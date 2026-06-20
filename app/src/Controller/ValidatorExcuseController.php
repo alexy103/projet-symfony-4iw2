@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\ClassicExcuse;
+use App\Entity\EmergencyExcuse;
 use App\Entity\Excuse;
 use App\Entity\ExcuseValidation;
+use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Repository\ExcuseRepository;
 use App\Security\Voter\ExcuseVoter;
@@ -21,8 +24,11 @@ final class ValidatorExcuseController extends AbstractController
     {
         $this->denyAccessUnlessValidatorOrAdmin();
 
+        $excuses = $excuseRepository->findPendingExcuses();
+
         return $this->render('validator/excuses.html.twig', [
-            'excuses' => $excuseRepository->findPendingExcuses(),
+            'excuses' => $excuses,
+            'excuseTypes' => $this->buildExcuseTypes($excuses),
         ]);
     }
 
@@ -101,6 +107,29 @@ final class ValidatorExcuseController extends AbstractController
         }
 
         throw $this->createAccessDeniedException();
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, string>
+     */
+    private function buildExcuseTypes(array $excuses): array
+    {
+        $types = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $types[$id] = match (true) {
+                    $excuse instanceof ClassicExcuse => 'classic',
+                    $excuse instanceof EmergencyExcuse => 'emergency',
+                    $excuse instanceof ProfessionalExcuse => 'professional',
+                    default => '',
+                };
+            }
+        }
+
+        return $types;
     }
 }
 

@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\ClassicExcuse;
+use App\Entity\EmergencyExcuse;
+use App\Entity\Excuse;
+use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Repository\ExcuseCommentRepository;
 use App\Repository\ExcuseRepository;
@@ -19,6 +23,7 @@ class ProfileController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $myExcuses = $excuseRepository->findUserExcuses($user);
+        $publicExcuses = $excuseRepository->findValidatedExcuses();
 
         $excuseIds = [];
         foreach ($myExcuses as $excuse) {
@@ -30,8 +35,33 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/index.html.twig', [
             'myExcuses' => $myExcuses,
-            'publicExcuses' => $excuseRepository->findValidatedExcuses(),
+            'publicExcuses' => $publicExcuses,
             'myExcuseCommentCounts' => $commentRepository->countByExcuseIds(array_values(array_unique($excuseIds))),
+            'myExcuseTypes' => $this->buildExcuseTypes($myExcuses),
+            'publicExcuseTypes' => $this->buildExcuseTypes($publicExcuses),
         ]);
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, string>
+     */
+    private function buildExcuseTypes(array $excuses): array
+    {
+        $types = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $types[$id] = match (true) {
+                    $excuse instanceof ClassicExcuse => 'classic',
+                    $excuse instanceof EmergencyExcuse => 'emergency',
+                    $excuse instanceof ProfessionalExcuse => 'professional',
+                    default => '',
+                };
+            }
+        }
+
+        return $types;
     }
 }
