@@ -155,7 +155,6 @@ Champs prévus :
 
 Statuts possibles :
 ```txt
-draft
 pending
 validated
 rejected
@@ -586,7 +585,7 @@ Règles envisagées :
 Un utilisateur peut modifier une excuse uniquement si :
 - il est connecté ;
 - il est l’auteur de l’excuse ;
-- l’excuse est encore en `draft` ou en `rejected`.
+- l’excuse est en `rejected`.
 
 Un validateur peut valider une excuse uniquement si :
 - il possède `ROLE_VALIDATOR` ;
@@ -876,7 +875,7 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 ### Regles Voter retenues
 
 - `ROLE_ADMIN` peut tout faire.
-- `EXCUSE_EDIT` : auteur uniquement, statut `draft` ou `rejected`.
+- `EXCUSE_EDIT` : auteur uniquement, statut `rejected`.
 - `EXCUSE_DELETE` : auteur uniquement, si statut different de `validated`.
 - `EXCUSE_VALIDATE` : `ROLE_VALIDATOR` uniquement, et excuse en `pending`.
 - `EXCUSE_VIEW` : auteur, validateur et admin.

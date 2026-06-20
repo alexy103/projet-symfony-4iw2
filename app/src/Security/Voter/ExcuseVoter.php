@@ -72,7 +72,7 @@ class ExcuseVoter extends Voter
             return false;
         }
 
-        return in_array($excuse->getStatus(), ['draft', 'rejected'], true);
+        return $excuse->getStatus() === 'rejected';
     }
 
     private function canDelete(Excuse $excuse, User $user): bool

@@ -13,7 +13,7 @@
         {% if is_granted('ROLE_ADMIN') %}
             <select name="status" class="border rounded px-3 py-2">
                 <option value="">Tous les statuts</option>
-                {% for s in ['draft', 'pending', 'validated', 'rejected'] %}
+                {% for s in ['pending', 'validated', 'rejected'] %}
                     <option value="{{ s }}" {% if filters.status|default('') == s %}selected{% endif %}>{{ s }}</option>
                 {% endfor %}
             </select>
