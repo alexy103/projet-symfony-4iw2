@@ -28,10 +28,10 @@
                 </a>
 
                 <div class="flex items-center gap-1 sm:gap-2 text-sm">
-                    <a href="{{ path('app_home') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Accueil</a>
 
                     {% if app.user %}
                         <a href="{{ path('app_excuse_index') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Excuses</a>
+                        <a href="{{ path('app_my_excuses') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Mes excuses</a>
                         {% if is_granted('ROLE_VALIDATOR') or is_granted('ROLE_ADMIN') %}
                             <a href="{{ path('app_validator_excuses') }}" class="px-3 py-2 rounded-md hover:bg-slate-100 transition">Validation</a>
                         {% endif %}

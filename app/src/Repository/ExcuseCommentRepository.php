@@ -30,4 +30,31 @@ class ExcuseCommentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @param int[] $excuseIds
+     *
+     * @return array<int, int>
+     */
+    public function countByExcuseIds(array $excuseIds): array
+    {
+        if ([] === $excuseIds) {
+            return [];
+        }
+
+        $rows = $this->createQueryBuilder('c')
+            ->select('IDENTITY(c.excuse) AS excuseId, COUNT(c.id) AS commentCount')
+            ->andWhere('c.excuse IN (:excuseIds)')
+            ->setParameter('excuseIds', $excuseIds)
+            ->groupBy('c.excuse')
+            ->getQuery()
+            ->getArrayResult();
+
+        $counts = [];
+        foreach ($rows as $row) {
+            $counts[(int) $row['excuseId']] = (int) $row['commentCount'];
+        }
+
+        return $counts;
+    }
 }

@@ -4,8 +4,11 @@
 
 {% block body %}
     <div class="flex items-center justify-between mb-4">
-        <h1 class="text-2xl font-bold">{{ excuse.title }}</h1>
-        <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
+        <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-bold">{{ excuse.title }}</h1>
+            {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+        </div>
+        {{ include('excuse/_type_badge.html.twig', {type: excuseType|default('')}) }}
     </div>
 
     <div class="bg-white border rounded-lg p-4 space-y-3">
@@ -14,6 +17,10 @@
         <p><span class="font-semibold">Contexte :</span> {{ excuse.context.name }}</p>
         <p><span class="font-semibold">Ton :</span> {{ excuse.tone.name }}</p>
         <p><span class="font-semibold">Urgence :</span> {{ excuse.urgencyLevel }}</p>
+        <p><span class="font-semibold">Créée le :</span> {{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+        {% if excuse.updatedAt %}
+            <p><span class="font-semibold">Dernière mise à jour :</span> {{ excuse.updatedAt|date('d/m/Y H:i') }}</p>
+        {% endif %}
         <p><span class="font-semibold">Contenu :</span></p>
         <p class="text-slate-700">{{ excuse.content }}</p>
         {% if excuse.status == 'rejected' %}
@@ -23,6 +30,24 @@
             </p>
         {% endif %}
     </div>
+
+    {% if is_granted('EXCUSE_VALIDATE', excuse) %}
+        <div class="mt-4 grid md:grid-cols-2 gap-3">
+            <form method="post" action="{{ path('app_validator_excuse_accept', {'id': excuse.id}) }}" class="p-3 border rounded-md bg-green-50">
+                <input type="hidden" name="_token" value="{{ csrf_token('accept' ~ excuse.id) }}">
+                <label class="text-sm font-medium text-green-900" for="accept_comment_show_{{ excuse.id }}">Commentaire (optionnel)</label>
+                <textarea id="accept_comment_show_{{ excuse.id }}" name="comment" rows="2" class="w-full mt-1 border rounded px-2 py-1"></textarea>
+                <button type="submit" class="mt-2 px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition">Accepter</button>
+            </form>
+
+            <form method="post" action="{{ path('app_validator_excuse_reject', {'id': excuse.id}) }}" class="p-3 border rounded-md bg-red-50">
+                <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ excuse.id) }}">
+                <label class="text-sm font-medium text-red-900" for="reject_comment_show_{{ excuse.id }}">Motif du rejet (optionnel)</label>
+                <textarea id="reject_comment_show_{{ excuse.id }}" name="comment" rows="2" class="w-full mt-1 border rounded px-2 py-1"></textarea>
+                <button type="submit" class="mt-2 px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition">Rejeter</button>
+            </form>
+        </div>
+    {% endif %}
 
     <div class="mt-4 flex gap-3">
         <a href="{{ path('app_my_excuses') }}" class="px-4 py-2 rounded-md bg-slate-200 hover:bg-slate-300">Retour</a>

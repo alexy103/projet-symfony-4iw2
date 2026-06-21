@@ -2,7 +2,7 @@ App\Entity\ClassicExcuse:
     classic_excuse_1:
         title: 'Bus supprimé à la dernière minute'
         content: 'Mon bus a été supprimé sans annonce et je suis arrivé en retard.'
-        status: 'draft'
+        status: 'pending'
         urgencyLevel: 4
         credibilityScore: 72
         createdAt: <(new \DateTimeImmutable('2026-06-10 08:15:00'))>

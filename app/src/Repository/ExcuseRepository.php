@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\ClassicExcuse;
+use App\Entity\EmergencyExcuse;
 use App\Entity\Excuse;
+use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,7 +32,8 @@ class ExcuseRepository extends ServiceEntityRepository
             ->leftJoin('e.tone', 't')->addSelect('t')
             ->andWhere('e.status = :status')
             ->setParameter('status', 'pending')
-            ->orderBy('e.createdAt', 'DESC')
+            ->addSelect('COALESCE(e.updatedAt, e.createdAt) AS HIDDEN lastActivityAt')
+            ->orderBy('lastActivityAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -45,7 +49,8 @@ class ExcuseRepository extends ServiceEntityRepository
             ->leftJoin('e.tone', 't')->addSelect('t')
             ->andWhere('e.author = :author')
             ->setParameter('author', $user)
-            ->orderBy('e.createdAt', 'DESC')
+            ->addSelect('COALESCE(e.updatedAt, e.createdAt) AS HIDDEN lastActivityAt')
+            ->orderBy('lastActivityAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -85,6 +90,18 @@ class ExcuseRepository extends ServiceEntityRepository
         if (!empty($filters['status'])) {
             $qb->andWhere('e.status = :status')
                 ->setParameter('status', (string) $filters['status']);
+        }
+
+        if (!empty($filters['type'])) {
+            $type = mb_strtolower((string) $filters['type']);
+
+            if ('classic' === $type) {
+                $qb->andWhere(sprintf('e INSTANCE OF %s', ClassicExcuse::class));
+            } elseif ('emergency' === $type) {
+                $qb->andWhere(sprintf('e INSTANCE OF %s', EmergencyExcuse::class));
+            } elseif ('professional' === $type) {
+                $qb->andWhere(sprintf('e INSTANCE OF %s', ProfessionalExcuse::class));
+            }
         }
 
         if (!empty($filters['authorId'])) {

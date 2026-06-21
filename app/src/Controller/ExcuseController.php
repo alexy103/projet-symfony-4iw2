@@ -8,6 +8,7 @@ use App\Entity\Excuse;
 use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Form\ExcuseType;
+use App\Repository\ExcuseCommentRepository;
 use App\Repository\ExcuseRepository;
 use App\Repository\ExcuseValidationRepository;
 use App\Security\Voter\ExcuseVoter;
@@ -27,6 +28,7 @@ final class ExcuseController extends AbstractController
         $filters = [
             'status' => $request->query->get('status', ''),
             'keyword' => $request->query->get('q', ''),
+            'type' => $request->query->get('type', ''),
             'categoryId' => $request->query->get('categoryId', ''),
             'contextId' => $request->query->get('contextId', ''),
             'toneId' => $request->query->get('toneId', ''),
@@ -36,14 +38,21 @@ final class ExcuseController extends AbstractController
             $filters['status'] = 'validated';
         }
 
+        $excuses = $excuseRepository->findByFilters($filters);
+
         return $this->render('excuse/index.html.twig', [
-            'excuses' => $excuseRepository->findByFilters($filters),
+            'excuses' => $excuses,
+            'excuseTypes' => $this->buildExcuseTypes($excuses),
             'filters' => $filters,
         ]);
     }
 
     #[Route('/my-excuses', name: 'app_my_excuses', methods: ['GET'])]
-    public function myExcuses(ExcuseRepository $excuseRepository, ExcuseValidationRepository $validationRepository): Response
+    public function myExcuses(
+        ExcuseRepository $excuseRepository,
+        ExcuseValidationRepository $validationRepository,
+        ExcuseCommentRepository $commentRepository,
+    ): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -52,7 +61,9 @@ final class ExcuseController extends AbstractController
 
         return $this->render('excuse/my_excuses.html.twig', [
             'excuses' => $excuses,
+            'excuseTypes' => $this->buildExcuseTypes($excuses),
             'rejectionReasons' => $this->buildRejectionReasons($excuses, $validationRepository),
+            'commentCounts' => $this->buildCommentCounts($excuses, $commentRepository),
         ]);
     }
 
@@ -103,6 +114,7 @@ final class ExcuseController extends AbstractController
 
         return $this->render('excuse/show.html.twig', [
             'excuse' => $excuse,
+            'excuseType' => $this->resolveType($excuse),
             'rejectionReason' => $rejectionReasons[$excuse->getId() ?? 0] ?? null,
         ]);
     }
@@ -214,6 +226,24 @@ final class ExcuseController extends AbstractController
      *
      * @return array<int, string>
      */
+    private function buildExcuseTypes(array $excuses): array
+    {
+        $types = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $types[$id] = $this->resolveType($excuse);
+            }
+        }
+
+        return $types;
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, string>
+     */
     private function buildRejectionReasons(array $excuses, ExcuseValidationRepository $validationRepository): array
     {
         $excuseIds = [];
@@ -229,6 +259,28 @@ final class ExcuseController extends AbstractController
         }
 
         return $validationRepository->findLatestRejectedCommentsByExcuseIds(array_values(array_unique($excuseIds)));
+    }
+
+    /**
+     * @param Excuse[] $excuses
+     *
+     * @return array<int, int>
+     */
+    private function buildCommentCounts(array $excuses, ExcuseCommentRepository $commentRepository): array
+    {
+        $excuseIds = [];
+        foreach ($excuses as $excuse) {
+            $id = $excuse->getId();
+            if (null !== $id) {
+                $excuseIds[] = $id;
+            }
+        }
+
+        if ([] === $excuseIds) {
+            return [];
+        }
+
+        return $commentRepository->countByExcuseIds(array_values(array_unique($excuseIds)));
     }
 }
 

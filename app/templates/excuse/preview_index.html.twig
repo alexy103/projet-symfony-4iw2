@@ -13,10 +13,13 @@
         <div class="space-y-3">
             {% for excuse in excuses %}
                 <a href="{{ path('app_excuse_preview_show', {id: excuse.id}) }}"
-                   class="block bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-indigo-300 transition">
-                    <div class="flex items-center justify-between gap-3">
+                   class="relative block bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-indigo-300 transition">
+                    <div class="absolute top-4 right-4">
+                        {{ include('excuse/_type_badge.html.twig', {type: excuseTypes[excuse.id]|default('')}) }}
+                    </div>
+                    <div class="flex items-center gap-2 pr-32">
                         <span class="font-semibold text-slate-900">{{ excuse.title }}</span>
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{{ excuse.status }}</span>
+                        {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
                     </div>
                     <p class="text-sm text-slate-500 mt-1 line-clamp-1">{{ excuse.content }}</p>
                     <p class="text-xs text-slate-400 mt-1">par {{ excuse.author.userIdentifier }} · {{ excuse.createdAt|date('d/m/Y') }}</p>

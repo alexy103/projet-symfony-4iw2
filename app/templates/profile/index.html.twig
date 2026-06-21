@@ -74,12 +74,25 @@
                 {% else %}
                     <div class="space-y-3">
                         {% for excuse in myExcuses %}
-                            <article class="p-4 border rounded-lg">
-                                <div class="flex items-center justify-between gap-2">
+                            <article class="relative p-4 border rounded-lg">
+                                <div class="absolute top-4 right-4">
+                                    {{ include('excuse/_type_badge.html.twig', {type: myExcuseTypes[excuse.id]|default('')}) }}
+                                </div>
+                                <div class="flex items-center gap-2 pr-32">
                                     <h3 class="font-semibold">{{ excuse.title }}</h3>
-                                    <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
+                                    {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
                                 </div>
                                 <p class="text-sm text-slate-600 mt-1">{{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                                {% if excuse.status == 'validated' %}
+                                    {% set commentsCount = myExcuseCommentCounts[excuse.id]|default(0) %}
+                                    <p class="mt-2 text-xs {{ commentsCount > 0 ? 'text-green-700' : 'text-slate-500' }}">
+                                        {% if commentsCount > 0 %}
+                                            {{ commentsCount }} commentaire{{ commentsCount > 1 ? 's' : '' }} reçu{{ commentsCount > 1 ? 's' : '' }}.
+                                        {% else %}
+                                            Aucun commentaire pour le moment.
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
                                 <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="inline-block mt-2 text-indigo-600 hover:underline text-sm">Voir le détail</a>
                             </article>
                         {% endfor %}
@@ -93,10 +106,13 @@
                 {% else %}
                     <div class="space-y-3">
                         {% for excuse in publicExcuses %}
-                            <article class="p-4 border rounded-lg">
-                                <div class="flex items-center justify-between gap-2">
+                            <article class="relative p-4 border rounded-lg">
+                                <div class="absolute top-4 right-4">
+                                    {{ include('excuse/_type_badge.html.twig', {type: publicExcuseTypes[excuse.id]|default('')}) }}
+                                </div>
+                                <div class="flex items-center gap-2 pr-32">
                                     <h3 class="font-semibold">{{ excuse.title }}</h3>
-                                    <span class="text-xs px-2 py-1 rounded bg-green-50 text-green-700">{{ excuse.status }}</span>
+                                    {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
                                 </div>
                                 <p class="text-sm text-slate-600 mt-1">Par {{ excuse.author.email }} — {{ excuse.createdAt|date('d/m/Y H:i') }}</p>
                                 <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="inline-block mt-2 text-indigo-600 hover:underline text-sm">Voir le détail</a>

@@ -18,7 +18,7 @@ App\Entity\ProfessionalExcuse:
     professional_excuse_2:
         title: 'Compte-rendu envoyé hors délai'
         content: 'Le compte-rendu a été retardé suite à une priorité de production inattendue.'
-        status: 'draft'
+        status: 'pending'
         urgencyLevel: 5
         credibilityScore: 77
         createdAt: <(new \DateTimeImmutable('2026-06-13 14:20:00'))>

@@ -8,19 +8,31 @@
         <a href="{{ path('app_excuse_new') }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">Nouvelle excuse</a>
     </div>
 
-    <form method="get" class="grid md:grid-cols-4 gap-3 mb-6 p-4 bg-white border rounded-lg">
+    <form method="get" class="grid md:grid-cols-5 gap-3 mb-6 p-4 bg-white border rounded-lg">
         <input type="text" name="q" value="{{ filters.keyword|default('') }}" placeholder="Recherche..." class="border rounded px-3 py-2">
+        <select name="type" class="border rounded px-3 py-2">
+            <option value="">Tous les types</option>
+            {% for typeValue, typeLabel in {
+                'classic': 'Classique',
+                'emergency': 'Urgence',
+                'professional': 'Professionnel'
+            } %}
+                <option value="{{ typeValue }}" {% if filters.type|default('') == typeValue %}selected{% endif %}>{{ typeLabel }}</option>
+            {% endfor %}
+        </select>
         {% if is_granted('ROLE_ADMIN') %}
             <select name="status" class="border rounded px-3 py-2">
                 <option value="">Tous les statuts</option>
-                {% for s in ['draft', 'pending', 'validated', 'rejected'] %}
-                    <option value="{{ s }}" {% if filters.status|default('') == s %}selected{% endif %}>{{ s }}</option>
+                {% for statusValue, statusLabel in {
+                    'pending': 'En attente',
+                    'validated': 'Validée',
+                    'rejected': 'Rejetée'
+                } %}
+                    <option value="{{ statusValue }}" {% if filters.status|default('') == statusValue %}selected{% endif %}>{{ statusLabel }}</option>
                 {% endfor %}
             </select>
-        {% else %}
-            <input type="hidden" name="status" value="validated">
-            <div class="border rounded px-3 py-2 text-sm text-slate-600 bg-slate-50">Affichage public : excuses validées</div>
         {% endif %}
+
         <button class="px-4 py-2 rounded-md bg-slate-800 text-white">Filtrer</button>
         <a href="{{ path('app_excuse_index') }}" class="px-4 py-2 rounded-md bg-slate-200 text-center">Réinitialiser</a>
     </form>
@@ -30,17 +42,19 @@
     {% else %}
         <div class="space-y-3">
             {% for excuse in excuses %}
-                <article class="p-4 bg-white border rounded-lg">
-                    <div class="flex items-center justify-between gap-2">
-                        <h2 class="font-semibold">{{ excuse.title }}</h2>
-                        <span class="text-xs px-2 py-1 rounded bg-slate-100">{{ excuse.status }}</span>
-                    </div>
-                    <p class="text-sm text-slate-600 mt-1">Par {{ excuse.author.email }} — {{ excuse.createdAt|date('d/m/Y H:i') }}</p>
-                    <p class="mt-2 text-slate-700">{{ excuse.content|slice(0, 180) }}{% if excuse.content|length > 180 %}...{% endif %}</p>
-                    <div class="mt-3 flex gap-2">
-                        <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="text-indigo-600 hover:underline">Voir</a>
-                    </div>
-                </article>
+                <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="relative block p-4 bg-white border rounded-lg hover:border-indigo-300 hover:shadow-sm transition">
+                    <article>
+                        <div class="absolute top-4 right-4">
+                            {{ include('excuse/_type_badge.html.twig', {type: excuseTypes[excuse.id]|default('')}) }}
+                        </div>
+                        <div class="flex items-center gap-2 pr-32">
+                            <h2 class="font-semibold">{{ excuse.title }}</h2>
+                            {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+                        </div>
+                        <p class="text-sm text-slate-600 mt-1">Par {{ excuse.author.email }} — {{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                        <p class="mt-2 text-slate-700">{{ excuse.content|slice(0, 180) }}{% if excuse.content|length > 180 %}...{% endif %}</p>
+                    </article>
+                </a>
             {% endfor %}
         </div>
     {% endif %}

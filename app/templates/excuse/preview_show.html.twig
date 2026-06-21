@@ -8,8 +8,11 @@
 
         <article class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div class="flex items-start justify-between gap-3">
-                <h1 class="text-2xl font-extrabold text-slate-900">{{ excuse.title }}</h1>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 shrink-0">{{ excuse.status }}</span>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-extrabold text-slate-900">{{ excuse.title }}</h1>
+                    {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+                </div>
+                {{ include('excuse/_type_badge.html.twig', {type: excuseType|default('')}) }}
             </div>
             <p class="text-xs text-slate-400 mt-1">par {{ excuse.author.userIdentifier }} · {{ excuse.createdAt|date('d/m/Y à H:i') }}</p>
 

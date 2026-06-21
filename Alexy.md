@@ -156,19 +156,15 @@ Pour aller vite, faire une page de création par type :
 Statuts recommandés :
 
 ```txt
-draft
 pending
 validated
 rejected
 ```
 
 Signification :
-- `draft` : brouillon, modifiable par l’auteur ;
 - `pending` : soumis à validation ;
 - `validated` : accepté par un validateur ;
 - `rejected` : refusé par un validateur.
-
-Pour simplifier au début, une excuse créée peut directement passer en `pending`.
 
 ### 6. Créer le Voter sur Excuse
 
@@ -188,7 +184,7 @@ EXCUSE_VALIDATE
 ```
 
 Règles :
-- l’auteur peut modifier son excuse si elle est en `draft` ou `rejected` ;
+- l’auteur peut modifier son excuse si elle est en `rejected` ;
 - l’auteur peut supprimer son excuse si elle n’est pas `validated` ;
 - un `ROLE_VALIDATOR` peut valider/refuser une excuse en `pending` ;
 - un `ROLE_ADMIN` peut tout faire.
