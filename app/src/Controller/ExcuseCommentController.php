@@ -19,6 +19,10 @@ final class ExcuseCommentController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function add(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
     {
+        if ('validated' !== $excuse->getStatus() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         /** @var User $user */
         $user = $this->getUser();
 

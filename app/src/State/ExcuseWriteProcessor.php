@@ -18,7 +18,11 @@ use App\Entity\ProfessionalExcuse;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Repository\ExcuseRepository;
+use App\Security\Voter\ExcuseVoter;
+use App\Service\CredibilityScoreService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 final readonly class ExcuseWriteProcessor implements ProcessorInterface
@@ -26,6 +30,8 @@ final readonly class ExcuseWriteProcessor implements ProcessorInterface
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ExcuseRepository $excuseRepository,
+        private Security $security,
+        private CredibilityScoreService $credibilityScoreService,
     ) {
     }
 
@@ -51,12 +57,13 @@ final readonly class ExcuseWriteProcessor implements ProcessorInterface
 
     private function createExcuse(ExcuseWriteInput $input): Excuse
     {
+        $author = $this->getAuthenticatedUser();
+
         $type = strtolower(trim((string) $input->type));
         if ('' === $type) {
             throw new BadRequestHttpException('Le champ "type" est obligatoire.');
         }
 
-        $author = $this->findOrFail(User::class, $input->authorId, 'authorId');
         $category = $this->findOrFail(ExcuseCategory::class, $input->categoryId, 'categoryId');
         $context = $this->findOrFail(ExcuseContext::class, $input->contextId, 'contextId');
         $tone = $this->findOrFail(ExcuseTone::class, $input->toneId, 'toneId');
@@ -74,6 +81,8 @@ final readonly class ExcuseWriteProcessor implements ProcessorInterface
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(null);
 
+        $excuse->setCredibilityScore($this->credibilityScoreService->calculate($excuse));
+
         $this->replaceTags($excuse, $input->tagIds);
 
         return $excuse;
@@ -89,6 +98,10 @@ final readonly class ExcuseWriteProcessor implements ProcessorInterface
         $excuse = $this->excuseRepository->find($id);
         if (!$excuse instanceof Excuse) {
             throw new BadRequestHttpException('Excuse introuvable.');
+        }
+
+        if (!$this->security->isGranted(ExcuseVoter::EXCUSE_EDIT, $excuse)) {
+            throw new AccessDeniedHttpException('Vous ne pouvez pas modifier cette excuse.');
         }
 
         if (null !== $input->type && '' !== trim($input->type)) {
@@ -111,11 +124,12 @@ final readonly class ExcuseWriteProcessor implements ProcessorInterface
         }
 
         if (null !== $input->authorId) {
-            $excuse->setAuthor($this->findOrFail(User::class, $input->authorId, 'authorId'));
+            throw new BadRequestHttpException('Le champ "authorId" est gere automatiquement.');
         }
 
         $this->applyCommonFields($excuse, $input, false);
         $this->applyTypeSpecificFields($excuse, $input, false);
+        $excuse->setCredibilityScore($this->credibilityScoreService->calculate($excuse));
         $excuse->setUpdatedAt(new \DateTimeImmutable());
 
         if (null !== $input->tagIds) {
@@ -161,9 +175,17 @@ final readonly class ExcuseWriteProcessor implements ProcessorInterface
             $excuse->setUrgencyLevel($input->urgencyLevel);
         }
 
-        if (null !== $input->credibilityScore) {
-            $excuse->setCredibilityScore($input->credibilityScore);
+        // credibilityScore est calcule automatiquement par l'application.
+    }
+
+    private function getAuthenticatedUser(): User
+    {
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            throw new AccessDeniedHttpException('Authentification requise.');
         }
+
+        return $user;
     }
 
     private function applyTypeSpecificFields(Excuse $excuse, ExcuseWriteInput $input, bool $isCreate): void

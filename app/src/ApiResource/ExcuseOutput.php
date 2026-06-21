@@ -32,6 +32,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             input: ExcuseWriteInput::class,
             processor: ExcuseWriteProcessor::class,
+            security: "is_granted('ROLE_USER')",
             normalizationContext: ['groups' => ['excuse:read', 'user:read', 'tag:read']],
             denormalizationContext: ['groups' => ['excuse:write']]
         ),
@@ -41,6 +42,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             input: ExcuseWriteInput::class,
             processor: ExcuseWriteProcessor::class,
+            security: "is_granted('ROLE_USER')",
             normalizationContext: ['groups' => ['excuse:read', 'user:read', 'tag:read']],
             denormalizationContext: ['groups' => ['excuse:write']]
         ),

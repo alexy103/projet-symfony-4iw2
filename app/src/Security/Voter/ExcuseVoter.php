@@ -59,7 +59,11 @@ class ExcuseVoter extends Voter
             return true;
         }
 
-        return $this->isAuthor($excuse, $user);
+        if ($this->isAuthor($excuse, $user)) {
+            return true;
+        }
+
+        return 'validated' === $excuse->getStatus();
     }
 
     private function canEdit(Excuse $excuse, User $user): bool
@@ -88,6 +92,7 @@ class ExcuseVoter extends Voter
 
         return $excuse->getStatus() === 'pending';
     }
+
 
     private function isAuthor(Excuse $excuse, User $user): bool
     {

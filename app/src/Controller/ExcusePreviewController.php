@@ -20,14 +20,20 @@ final class ExcusePreviewController extends AbstractController
     #[Route(name: 'app_excuse_preview_index', methods: ['GET'])]
     public function index(ExcuseRepository $excuseRepository): Response
     {
+        $criteria = $this->isGranted('ROLE_ADMIN') ? [] : ['status' => 'validated'];
+
         return $this->render('excuse/preview_index.html.twig', [
-            'excuses' => $excuseRepository->findBy([], ['createdAt' => 'DESC']),
+            'excuses' => $excuseRepository->findBy($criteria, ['createdAt' => 'DESC']),
         ]);
     }
 
     #[Route('/{id}', name: 'app_excuse_preview_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Excuse $excuse, ExcuseCommentRepository $commentRepository, ExcuseRatingRepository $ratingRepository): Response
     {
+        if ('validated' !== $excuse->getStatus() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         /** @var User|null $user */
         $user = $this->getUser();
 

@@ -22,8 +22,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 ])]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/v1/entities/excuses'),
-        new Get(uriTemplate: '/v1/entities/excuses/{id}', requirements: ['id' => '\\d+']),
+        new GetCollection(uriTemplate: '/v1/entities/excuses', security: "is_granted('ROLE_ADMIN')"),
+        new Get(uriTemplate: '/v1/entities/excuses/{id}', requirements: ['id' => '\\d+'], security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['excuse:read']]
 )]

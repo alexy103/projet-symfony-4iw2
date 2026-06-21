@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\ExcuseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,8 +13,14 @@ class ProfileController extends AbstractController
 {
     #[Route('/profil', name: 'app_profile', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function index(): Response
+    public function index(ExcuseRepository $excuseRepository): Response
     {
-        return $this->render('profile/index.html.twig');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return $this->render('profile/index.html.twig', [
+            'myExcuses' => $excuseRepository->findUserExcuses($user),
+            'publicExcuses' => $excuseRepository->findValidatedExcuses(),
+        ]);
     }
 }

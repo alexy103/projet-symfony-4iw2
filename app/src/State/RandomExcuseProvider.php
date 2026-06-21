@@ -15,14 +15,14 @@ final readonly class RandomExcuseProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?ExcuseOutput
     {
-        $count = $this->excuseRepository->count([]);
+        $count = $this->excuseRepository->count(['status' => 'validated']);
 
         if (0 === $count) {
             return null;
         }
 
         $offset = random_int(0, $count - 1);
-        $excuses = $this->excuseRepository->findBy([], ['id' => 'ASC'], 1, $offset);
+        $excuses = $this->excuseRepository->findBy(['status' => 'validated'], ['id' => 'ASC'], 1, $offset);
 
         if ([] === $excuses) {
             return null;

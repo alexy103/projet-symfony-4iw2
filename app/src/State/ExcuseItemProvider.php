@@ -6,10 +6,14 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\ExcuseOutput;
 use App\Repository\ExcuseRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class ExcuseItemProvider implements ProviderInterface
 {
-    public function __construct(private ExcuseRepository $excuseRepository)
+    public function __construct(
+        private ExcuseRepository $excuseRepository,
+        private Security $security,
+    )
     {
     }
 
@@ -23,6 +27,10 @@ final readonly class ExcuseItemProvider implements ProviderInterface
         $excuse = $this->excuseRepository->find($id);
 
         if (null === $excuse) {
+            return null;
+        }
+
+        if ('validated' !== $excuse->getStatus() && !$this->security->isGranted('ROLE_ADMIN')) {
             return null;
         }
 
