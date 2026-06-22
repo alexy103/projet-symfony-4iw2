@@ -5,6 +5,8 @@ RUN apt-get update && \
     docker-php-ext-install pdo_pgsql zip intl && \
     rm -rf /var/lib/apt/lists/*
 
+RUN echo "date.timezone=Europe/Paris" > /usr/local/etc/php/conf.d/timezone.ini
+
 # Installer Composer depuis l'image officielle Composer
 COPY --from=composer:lts /usr/bin/composer /usr/bin/composer
 
