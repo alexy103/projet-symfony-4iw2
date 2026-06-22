@@ -20,8 +20,8 @@ Finaliser et sécuriser ce flux métier :
 
 ```txt
 Un User crée une excuse
-→ l’excuse est en brouillon ou en attente
-→ un ROLE_VALIDATOR peut l’accepter ou la refuser
+→ l’excuse passe en pending
+→ un ROLE_VALIDATOR peut l’accepter (validated) ou la refuser (rejected)
 → les droits sont contrôlés proprement
 ```
 
@@ -223,9 +223,9 @@ Routes possibles :
 /validator/excuses/{id}/reject
 ```
 
-### 8. Ajouter des méthodes Repository utiles
+### 8. Méthodes Repository utiles
 
-Dans `ExcuseRepository`, prévoir :
+Dans `ExcuseRepository`, les méthodes suivantes sont en place :
 
 ```txt
 findPendingExcuses()
@@ -233,6 +233,12 @@ findUserExcuses(User $user)
 findValidatedExcuses()
 findByFilters(...)
 ```
+
+`findByFilters(...)` supporte :
+- `status`, `type`, `categoryId`, `contextId`, `toneId` ;
+- `keyword` ;
+- `minCredibility` / `maxCredibility` ;
+- `sort` (recent, oldest, crédibilité, titre).
 
 Objectifs :
 - éviter le N+1 ;
@@ -274,7 +280,6 @@ Tests recommandés :
 
 Ne pas prioriser pour l’instant :
 - badges ;
-- notifications ;
 - commentaires ;
 - notes ;
 - tags ;
@@ -379,6 +384,10 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 - Etape 6 terminee : API Platform installee + endpoints `GET /api/v1/excuses/{id}` et `GET /api/v1/excuses/random`.
 - Etape 7 terminee : `ApiResource` ajoute sur les entites exposees (`Excuse`, `ExcuseCategory`, `ExcuseContext`, `ExcuseTone`, `Tag`) en lecture.
 - Etape 8 terminee : suppression complete de Nelmio CORS (`.env`, `bundles.php`, recette Flex, lockfiles) et verification Symfony OK.
+- Etape 9 terminee : suppression du statut `needs_changes` dans le flux de validation.
+- Etape 10 terminee : filtres `/excuses` complets (categorie, contexte, ton) + options de tri.
+- Etape 11 terminee : notifications sur excuse soumise, nouveau commentaire et badge debloque.
+- Etape 12 terminee : notifications validation/rejet confirmees dans le flux validator.
 
 ### Prochaine etape
 
@@ -411,12 +420,13 @@ Ce journal est mis a jour au fil de l'eau pour suivre exactement ce qui est deci
 
 ### Notifications et mails
 
-- [ ] Brancher Mailer/Notifier sur les evenements cles (soumission, validation, rejet, badge).
+- [x] Notifications branchees sur soumission, validation, rejet, nouveau commentaire et badge.
+- [ ] Completer la strategie de preferences de notification (optionnel) et la couverture de tests associee.
 
 ### Qualite et outillage
 
-- [ ] Ajouter PHPUnit (le package n'est pas encore present dans `composer.json`).
-- [ ] Creer au moins 1 test unitaire + 1 test fonctionnel conformes au sujet.
+- [x] Ajouter PHPUnit (package present dans `composer.json`).
+- [x] Creer au moins 1 test unitaire + 1 test fonctionnel conformes au sujet.
 - [ ] Ajouter PHPStan (config + niveau cible) et corriger les erreurs critiques.
 - [ ] Ajouter pipeline CI (lint container/twig/yaml + phpstan + tests).
 

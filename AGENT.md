@@ -364,6 +364,7 @@ Table de liaison ManyToMany entre `user` et `badge`.
 Notification envoyée à un utilisateur.
 
 Exemples :
+- excuse soumise à validation ;
 - excuse validée ;
 - excuse refusée ;
 - nouveau commentaire ;
@@ -645,6 +646,7 @@ Utiliser le composant Mailer ou Notifier pour envoyer des messages.
 - excuse soumise à validation ;
 - excuse validée ;
 - excuse refusée ;
+- nouveau commentaire ;
 - nouveau badge obtenu.
 
 Prévoir un service, par exemple :
@@ -895,14 +897,16 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - Etape 11 terminee : endpoint random limite aux excuses `validated`.
 - Etape 12 terminee : ajustements front/profil pour distinguer "mes excuses" et liste publique des excuses validees.
 - Etape 13 terminee : ajout de l'acces global a `/my-excuses` (onglet "Mes excuses") et affichage du statut de commentaires recus sur les excuses validees de l'auteur.
+- Etape 14 terminee : suppression du statut `needs_changes` dans le flux metier et les fixtures (statuts conserves : `pending`, `validated`, `rejected`).
+- Etape 15 terminee : ajout des filtres `/excuses` (categorie, contexte, ton) et du tri (recent, oldest, credibilite, titre).
+- Etape 16 terminee : notifications ajoutees pour excuse soumise, nouveau commentaire et badge debloque (validation/rejet deja en place).
 
 ### Prochaines etapes prioritaires
 
 - Ajouter les tests minimum obligatoires du sujet :
   - 1 test unitaire (`CredibilityScoreService`).
   - 1 test fonctionnel (droits API + flux validator).
-- Ajouter l'integration API externe via HttpClient (ex: meteo) avec gestion d'erreurs/fallback.
-- Brancher Mailer/Notifier sur les evenements cle (soumission, validation, rejet).
+- Verifier et completer la couverture de tests de securite metier (Voter, API write, routes validator).
 - Mettre en place l'outillage qualite manquant : PHPUnit, PHPStan, pipeline CI (lint + analyse statique + tests).
 
 
