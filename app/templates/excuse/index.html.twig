@@ -8,7 +8,7 @@
         <a href="{{ path('app_excuse_new') }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">Nouvelle excuse</a>
     </div>
 
-    <form method="get" class="grid md:grid-cols-5 gap-3 mb-6 p-4 bg-white border rounded-lg">
+    <form method="get" class="grid md:grid-cols-4 xl:grid-cols-8 gap-3 mb-6 p-4 bg-white border rounded-lg">
         <input type="text" name="q" value="{{ filters.keyword|default('') }}" placeholder="Recherche..." class="border rounded px-3 py-2">
         <select name="type" class="border rounded px-3 py-2">
             <option value="">Tous les types</option>
@@ -20,6 +20,41 @@
                 <option value="{{ typeValue }}" {% if filters.type|default('') == typeValue %}selected{% endif %}>{{ typeLabel }}</option>
             {% endfor %}
         </select>
+
+        <select name="categoryId" class="border rounded px-3 py-2">
+            <option value="">Toutes les catégories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if filters.categoryId|default('') == (category.id ~ '') %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="contextId" class="border rounded px-3 py-2">
+            <option value="">Tous les contextes</option>
+            {% for context in contexts %}
+                <option value="{{ context.id }}" {% if filters.contextId|default('') == (context.id ~ '') %}selected{% endif %}>{{ context.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="toneId" class="border rounded px-3 py-2">
+            <option value="">Tous les tons</option>
+            {% for tone in tones %}
+                <option value="{{ tone.id }}" {% if filters.toneId|default('') == (tone.id ~ '') %}selected{% endif %}>{{ tone.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="sort" class="border rounded px-3 py-2">
+            {% for sortValue, sortLabel in {
+                'recent': 'Plus récentes',
+                'oldest': 'Plus anciennes',
+                'credibility_desc': 'Crédibilité décroissante',
+                'credibility_asc': 'Crédibilité croissante',
+                'title_asc': 'Titre A → Z',
+                'title_desc': 'Titre Z → A'
+            } %}
+                <option value="{{ sortValue }}" {% if filters.sort|default('recent') == sortValue %}selected{% endif %}>{{ sortLabel }}</option>
+            {% endfor %}
+        </select>
+
         {% if is_granted('ROLE_ADMIN') %}
             <select name="status" class="border rounded px-3 py-2">
                 <option value="">Tous les statuts</option>

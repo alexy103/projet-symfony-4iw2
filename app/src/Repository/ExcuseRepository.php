@@ -73,7 +73,7 @@ class ExcuseRepository extends ServiceEntityRepository
     }
 
     /**
-     * Filtres supportés: status, authorId, categoryId, contextId, toneId, keyword, minCredibility, maxCredibility.
+     * Filtres supportés: status, authorId, categoryId, contextId, toneId, keyword, minCredibility, maxCredibility, sort.
      *
      * @param array<string, mixed> $filters
      *
@@ -85,7 +85,8 @@ class ExcuseRepository extends ServiceEntityRepository
             ->leftJoin('e.author', 'a')->addSelect('a')
             ->leftJoin('e.category', 'c')->addSelect('c')
             ->leftJoin('e.context', 'ctx')->addSelect('ctx')
-            ->leftJoin('e.tone', 't')->addSelect('t');
+            ->leftJoin('e.tone', 't')->addSelect('t')
+            ->addSelect('COALESCE(e.updatedAt, e.createdAt) AS HIDDEN sortActivityAt');
 
         if (!empty($filters['status'])) {
             $qb->andWhere('e.status = :status')
@@ -139,10 +140,23 @@ class ExcuseRepository extends ServiceEntityRepository
                 ->setParameter('maxCredibility', (int) $filters['maxCredibility']);
         }
 
-        return $qb
-            ->orderBy('e.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $sort = (string) ($filters['sort'] ?? 'recent');
+
+        if ('oldest' === $sort) {
+            $qb->orderBy('sortActivityAt', 'ASC');
+        } elseif ('credibility_desc' === $sort) {
+            $qb->orderBy('e.credibilityScore', 'DESC')->addOrderBy('sortActivityAt', 'DESC');
+        } elseif ('credibility_asc' === $sort) {
+            $qb->orderBy('e.credibilityScore', 'ASC')->addOrderBy('sortActivityAt', 'DESC');
+        } elseif ('title_asc' === $sort) {
+            $qb->orderBy('e.title', 'ASC')->addOrderBy('sortActivityAt', 'DESC');
+        } elseif ('title_desc' === $sort) {
+            $qb->orderBy('e.title', 'DESC')->addOrderBy('sortActivityAt', 'DESC');
+        } else {
+            $qb->orderBy('sortActivityAt', 'DESC');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     //    /**

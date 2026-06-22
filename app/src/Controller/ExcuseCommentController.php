@@ -6,6 +6,7 @@ use App\Entity\Excuse;
 use App\Entity\ExcuseComment;
 use App\Entity\User;
 use App\Form\ExcuseCommentType;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,12 @@ final class ExcuseCommentController extends AbstractController
 {
     #[Route('/excuse/{id}/comment', name: 'app_excuse_comment_add', methods: ['POST'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_USER')]
-    public function add(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
+    public function add(
+        Request $request,
+        Excuse $excuse,
+        EntityManagerInterface $entityManager,
+        NotificationService $notificationService,
+    ): Response
     {
         if ('validated' !== $excuse->getStatus() && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
@@ -37,6 +43,15 @@ final class ExcuseCommentController extends AbstractController
 
             $entityManager->persist($comment);
             $entityManager->flush();
+
+            $author = $excuse->getAuthor();
+            if (null !== $author && $author !== $user) {
+                $notificationService->notify(
+                    $author,
+                    'Nouveau commentaire',
+                    sprintf('Votre excuse "%s" a reçu un nouveau commentaire.', $excuse->getTitle() ?? 'sans titre')
+                );
+            }
 
             $this->addFlash('success', 'Commentaire ajouté.');
         } else {

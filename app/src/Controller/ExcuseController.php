@@ -8,10 +8,14 @@ use App\Entity\Excuse;
 use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Form\ExcuseType;
+use App\Repository\ExcuseCategoryRepository;
 use App\Repository\ExcuseCommentRepository;
+use App\Repository\ExcuseContextRepository;
 use App\Repository\ExcuseRepository;
+use App\Repository\ExcuseToneRepository;
 use App\Repository\ExcuseValidationRepository;
 use App\Security\Voter\ExcuseVoter;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +27,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ExcuseController extends AbstractController
 {
     #[Route('/excuses', name: 'app_excuse_index', methods: ['GET'])]
-    public function index(Request $request, ExcuseRepository $excuseRepository): Response
+    public function index(
+        Request $request,
+        ExcuseRepository $excuseRepository,
+        ExcuseCategoryRepository $categoryRepository,
+        ExcuseContextRepository $contextRepository,
+        ExcuseToneRepository $toneRepository,
+    ): Response
     {
         $filters = [
             'status' => $request->query->get('status', ''),
@@ -32,6 +42,7 @@ final class ExcuseController extends AbstractController
             'categoryId' => $request->query->get('categoryId', ''),
             'contextId' => $request->query->get('contextId', ''),
             'toneId' => $request->query->get('toneId', ''),
+            'sort' => $request->query->get('sort', 'recent'),
         ];
 
         if (!$this->isGranted('ROLE_ADMIN')) {
@@ -44,6 +55,9 @@ final class ExcuseController extends AbstractController
             'excuses' => $excuses,
             'excuseTypes' => $this->buildExcuseTypes($excuses),
             'filters' => $filters,
+            'categories' => $categoryRepository->findBy([], ['name' => 'ASC']),
+            'contexts' => $contextRepository->findBy([], ['name' => 'ASC']),
+            'tones' => $toneRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
@@ -74,7 +88,12 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/excuses/new/{type}', name: 'app_excuse_new_type', methods: ['GET', 'POST'], requirements: ['type' => 'classic|emergency|professional'])]
-    public function newByType(string $type, Request $request, EntityManagerInterface $entityManager): Response
+    public function newByType(
+        string $type,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        NotificationService $notificationService,
+    ): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -93,6 +112,12 @@ final class ExcuseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($excuse);
             $entityManager->flush();
+
+            $notificationService->notify(
+                $user,
+                'Excuse soumise',
+                sprintf('Votre excuse "%s" a été soumise à validation.', $excuse->getTitle() ?? 'sans titre')
+            );
 
             $this->addFlash('success', 'Excuse créée et soumise à validation.');
 
@@ -178,7 +203,12 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/excuses/{id}/resubmit', name: 'app_excuse_resubmit', methods: ['POST'])]
-    public function resubmit(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
+    public function resubmit(
+        Request $request,
+        Excuse $excuse,
+        EntityManagerInterface $entityManager,
+        NotificationService $notificationService,
+    ): Response
     {
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_EDIT, $excuse);
 
@@ -195,6 +225,14 @@ final class ExcuseController extends AbstractController
         $excuse->setStatus('pending');
         $excuse->setUpdatedAt(new \DateTimeImmutable());
         $entityManager->flush();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $notificationService->notify(
+            $user,
+            'Excuse soumise',
+            sprintf('Votre excuse "%s" a été resoumise à validation.', $excuse->getTitle() ?? 'sans titre')
+        );
 
         $this->addFlash('success', 'Excuse resoumise à validation.');
 

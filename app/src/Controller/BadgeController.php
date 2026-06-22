@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\BadgeType;
 use App\Repository\BadgeRepository;
 use App\Repository\UserRepository;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -100,7 +101,13 @@ final class BadgeController extends AbstractController
     }
 
     #[Route('/{id}/recipients', name: 'app_badge_recipients', methods: ['GET', 'POST'])]
-    public function recipients(Request $request, Badge $badge, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    public function recipients(
+        Request $request,
+        Badge $badge,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        NotificationService $notificationService,
+    ): Response
     {
         if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_VALIDATOR')) {
             throw $this->createAccessDeniedException();
@@ -119,6 +126,7 @@ final class BadgeController extends AbstractController
         if ($request->isMethod('POST')) {
             if ($this->isCsrfTokenValid('recipients'.$badge->getId(), $request->getPayload()->getString('_token'))) {
                 $selectedIds = $request->getPayload()->all('users');
+                $newRecipients = [];
 
                 foreach ($users as $user) {
                     $hasBadge = $badge->getUsers()->contains($user);
@@ -126,12 +134,22 @@ final class BadgeController extends AbstractController
 
                     if ($shouldHave && !$hasBadge) {
                         $badge->addUser($user);
+                        $newRecipients[] = $user;
                     } elseif (!$shouldHave && $hasBadge) {
                         $badge->removeUser($user);
                     }
                 }
 
                 $entityManager->flush();
+
+                foreach ($newRecipients as $recipient) {
+                    $notificationService->notify(
+                        $recipient,
+                        'Badge débloqué',
+                        sprintf('Félicitations, vous avez débloqué le badge "%s".', $badge->getName() ?? 'sans nom')
+                    );
+                }
+
                 $this->addFlash('success', 'Les attributions du badge ont été mises à jour.');
 
                 return $this->redirectToRoute('app_badge_index', [], Response::HTTP_SEE_OTHER);
