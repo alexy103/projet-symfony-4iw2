@@ -39,3 +39,5 @@ jobs:
       - name: Lint Container
         run: php bin/console lint:container
 
+      - name: Run PHPUnit
+        run: php bin/phpunit
