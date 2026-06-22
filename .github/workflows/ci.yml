@@ -25,6 +25,9 @@ jobs:
         with:
           php-version: '8.4'
           extensions: ctype, iconv, mbstring, pdo_sqlite
+          tools: composer:v2
+          cache: composer
+          cache-dependency-path: app/composer.lock
           coverage: none
 
       - name: Install dependencies
@@ -59,6 +62,9 @@ jobs:
         with:
           php-version: '8.4'
           extensions: ctype, iconv, mbstring, pdo_sqlite
+          tools: composer:v2
+          cache: composer
+          cache-dependency-path: app/composer.lock
           coverage: none
 
       - name: Install dependencies
