@@ -10,6 +10,7 @@ use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
 use App\Repository\ExcuseRepository;
 use App\Security\Voter\ExcuseVoter;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ final class ValidatorExcuseController extends AbstractController
     }
 
     #[Route('/{id}/accept', name: 'app_validator_excuse_accept', methods: ['POST'])]
-    public function accept(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
+    public function accept(Request $request, Excuse $excuse, EntityManagerInterface $entityManager, NotificationService $notificationService): Response
     {
         $this->denyAccessUnlessValidatorOrAdmin();
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_VALIDATE, $excuse);
@@ -61,13 +62,22 @@ final class ValidatorExcuseController extends AbstractController
         $entityManager->persist($validation);
         $entityManager->flush();
 
+        $author = $excuse->getAuthor();
+        if (null !== $author) {
+            $notificationService->notify(
+                $author,
+                'Excuse validée',
+                sprintf('Ton excuse « %s » a été acceptée par un validateur.', $excuse->getTitle())
+            );
+        }
+
         $this->addFlash('success', 'Excuse acceptée.');
 
         return $this->redirectToRoute('app_validator_excuses');
     }
 
     #[Route('/{id}/reject', name: 'app_validator_excuse_reject', methods: ['POST'])]
-    public function reject(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
+    public function reject(Request $request, Excuse $excuse, EntityManagerInterface $entityManager, NotificationService $notificationService): Response
     {
         $this->denyAccessUnlessValidatorOrAdmin();
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_VALIDATE, $excuse);
@@ -94,6 +104,15 @@ final class ValidatorExcuseController extends AbstractController
 
         $entityManager->persist($validation);
         $entityManager->flush();
+
+        $author = $excuse->getAuthor();
+        if (null !== $author) {
+            $message = sprintf('Ton excuse « %s » a été refusée par un validateur.', $excuse->getTitle());
+            if (null !== $validation->getComment()) {
+                $message .= sprintf(' Motif : %s', $validation->getComment());
+            }
+            $notificationService->notify($author, 'Excuse refusée', $message);
+        }
 
         $this->addFlash('warning', 'Excuse rejetée.');
 
