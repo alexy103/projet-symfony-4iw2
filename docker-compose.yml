@@ -5,6 +5,7 @@ services:
       context: .
     depends_on:
       - db
+      - mailer
     ports:
       - "9000:80"
     volumes:
@@ -31,6 +32,15 @@ services:
       - db
     ports:
       - "8080:8080"
+
+  mailer:
+    image: axllent/mailpit
+    container_name: mailer
+    ports:
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
 volumes:
   db_data:
