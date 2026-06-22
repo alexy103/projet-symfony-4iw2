@@ -12,7 +12,7 @@ Ne pas partir sur des fonctionnalités secondaires tant que le flux principal n�
 
 Le projet est une application Symfony 8.1 + Twig de **générateur d’excuses**.
 
-Un utilisateur peut proposer une excuse. Cette excuse peut ensuite être validée, refusée ou renvoyée pour modification par un utilisateur ayant `ROLE_VALIDATOR`.
+Un utilisateur peut proposer une excuse. Cette excuse peut ensuite être validée ou refusée par un utilisateur ayant `ROLE_VALIDATOR`.
 
 ## Mission principale
 
@@ -213,7 +213,6 @@ Statuts possibles :
 ```txt
 accepted
 rejected
-needs_changes
 ```
 
 Routes possibles :

@@ -71,7 +71,6 @@ Il peut :
 - créer des excuses ;
 - modifier ses propres excuses selon certaines conditions ;
 - commenter des excuses ;
-- noter des excuses ;
 - consulter ses notifications ;
 - recevoir des badges.
 
@@ -326,7 +325,6 @@ Statuts possibles :
 ```txt
 accepted
 rejected
-needs_changes
 ```
 
 ### tag
