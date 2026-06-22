@@ -1,0 +1,20 @@
+name: Setup Symfony CI
+description: Setup PHP and install Composer dependencies for the Symfony app.
+runs:
+  using: composite
+  steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: ctype, iconv, mbstring, pdo_sqlite
+        tools: composer:v2
+        cache: composer
+        cache-dependency-path: app/composer.lock
+        coverage: none
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: app
+      run: composer install --no-interaction --no-progress --prefer-dist
+
