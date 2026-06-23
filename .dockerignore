@@ -33,3 +33,12 @@
 **/vendor
 LICENSE
 README.md
+
+# --- Production (Dockerfile.prod) ---
+# On embarque le .env de base (valeurs non secrètes) ; les secrets sont injectés au runtime
+!app/.env
+# On n'embarque jamais les surcharges locales ni les tests dans l'image de prod
+app/.env.local
+app/.env.*.local
+app/tests
+.env.prod.local
