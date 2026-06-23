@@ -10,7 +10,6 @@ services:
     env_file:
       - .env.prod.local
     ports:
-      # Exposé uniquement en HTTP interne : ton Caddy fait le reverse proxy + TLS.
       - "8090:80"
     volumes:
       - uploads_data:/var/www/html/public/uploads
