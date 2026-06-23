@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+
+ENV_FILE=.env.prod.local
+COMPOSE="docker compose --env-file $ENV_FILE -f compose.prod.yaml"
+
+if [ ! -f "$ENV_FILE" ]; then
+    echo "Erreur : $ENV_FILE introuvable. Copie .env.prod.local.example et remplis-le."
+    exit 1
+fi
+
+echo ">> Récupération du code"
+git pull --ff-only
+
+echo ">> Build de l'image de production"
+$COMPOSE build
+
+echo ">> Démarrage des conteneurs"
+$COMPOSE up -d
+
+echo ">> Migrations de base de données"
+$COMPOSE exec -T php php bin/console doctrine:migrations:migrate --no-interaction
+
+echo ">> Nettoyage du cache"
+$COMPOSE exec -T php php bin/console cache:clear --no-interaction
+
+echo ">> Déploiement terminé."
