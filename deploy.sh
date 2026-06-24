@@ -19,6 +19,11 @@ $COMPOSE build
 echo ">> Démarrage des conteneurs"
 $COMPOSE up -d
 
+echo ">> Attente de la base de données"
+until $COMPOSE exec -T db pg_isready -U app -d app >/dev/null 2>&1; do
+    sleep 1
+done
+
 echo ">> Migrations de base de données"
 $COMPOSE exec -T php php bin/console doctrine:migrations:migrate --no-interaction
 
