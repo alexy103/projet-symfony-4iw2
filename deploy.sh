@@ -24,13 +24,13 @@ until $COMPOSE exec -T db pg_isready -U app -d app >/dev/null 2>&1; do
     sleep 1
 done
 
+echo ">> Nettoyage du cache"
+$COMPOSE exec -T php php bin/console cache:clear --no-interaction
+
 echo ">> Migrations de base de données"
 $COMPOSE exec -T php php bin/console doctrine:migrations:migrate --no-interaction
 
 echo ">> Chargement des fixtures (purge puis recharge la base)"
 $COMPOSE exec -T php php bin/console hautelook:fixtures:load --no-interaction
-
-echo ">> Nettoyage du cache"
-$COMPOSE exec -T php php bin/console cache:clear --no-interaction
 
 echo ">> Déploiement terminé."

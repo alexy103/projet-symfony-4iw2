@@ -14,7 +14,6 @@ services:
       - "127.0.0.1:8090:80"
     volumes:
       - uploads_data:/var/www/html/public/uploads
-      - var_data:/var/www/html/var
 
   db:
     image: postgres:16-alpine
@@ -35,4 +34,3 @@ services:
 volumes:
   db_data:
   uploads_data:
-  var_data:
