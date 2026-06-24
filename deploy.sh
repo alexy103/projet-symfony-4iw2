@@ -33,4 +33,7 @@ $COMPOSE exec -T php php bin/console doctrine:migrations:migrate --no-interactio
 echo ">> Chargement des fixtures (purge puis recharge la base)"
 $COMPOSE exec -T php php bin/console hautelook:fixtures:load --no-interaction
 
+echo ">> Correction des droits (var/ + uploads)"
+$COMPOSE exec -T php chown -R www-data:www-data var public/uploads
+
 echo ">> Déploiement terminé."
