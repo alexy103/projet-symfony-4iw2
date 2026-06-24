@@ -34,8 +34,10 @@ WORKDIR /var/www/html
 COPY app/ /var/www/html/
 COPY --from=vendor /app/vendor /var/www/html/vendor
 
-RUN mkdir -p var public/uploads/badges \
-    && chown -R www-data:www-data var public/uploads
-
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
+
+# Copie les assets des bundles (EasyAdmin, API Platform...) dans public/bundles/
+RUN php bin/console assets:install public --no-interaction \
+    && mkdir -p var public/uploads/badges \
+    && chown -R www-data:www-data var public/uploads
