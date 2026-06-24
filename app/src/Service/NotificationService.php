@@ -6,6 +6,7 @@ use App\Entity\Notification;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
@@ -14,6 +15,8 @@ class NotificationService
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly MailerInterface $mailer,
+        #[Autowire('%env(MAILER_FROM)%')]
+        private readonly string $senderEmail = 'noreply@excusatron.test',
     ) {
     }
 
@@ -39,7 +42,7 @@ class NotificationService
     private function sendEmail(User $user, string $title, string $message): void
     {
         $email = (new TemplatedEmail())
-            ->from(new Address('noreply@excusatron.test', 'Excusatron 3000'))
+            ->from(new Address($this->senderEmail, 'Excusatron 3000'))
             ->to($user->getEmail())
             ->subject($title)
             ->htmlTemplate('email/notification.html.twig')
