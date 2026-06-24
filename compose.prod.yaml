@@ -8,12 +8,24 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      mailer:
+        condition: service_started
     env_file:
       - .env.prod.local
     ports:
       - "127.0.0.1:8090:80"
     volumes:
       - uploads_data:/var/www/html/public/uploads
+
+  mailer:
+    image: axllent/mailpit
+    container_name: excusatron_mailer
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
   db:
     image: postgres:16-alpine
