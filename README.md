@@ -42,7 +42,7 @@ docker compose exec php php bin/console hautelook:fixtures:load --no-interaction
 |---|---| --- |
 | Application | http://localhost:9000 | https://excuses.escanordev.fr |
 | Back-office (admin) | http://localhost:9000/admin | https://excuses.escanordev.fr/admin |
-| API JSON | http://localhost:9000/api/v1 | https://excuses.escanordev.fr/api/v1 |
+| API JSON | http://localhost:9000/api/docs | https://excuses.escanordev.fr/api/docs |
 | Adminer (base de données) | http://localhost:8080 | - |
 | Mailpit (e-mails de dev) | http://localhost:8025 | https://mailpit.escanordev.fr |
 
