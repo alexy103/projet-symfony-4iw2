@@ -27,6 +27,9 @@ done
 echo ">> Migrations de base de données"
 $COMPOSE exec -T php php bin/console doctrine:migrations:migrate --no-interaction
 
+echo ">> Chargement des fixtures (purge puis recharge la base)"
+$COMPOSE exec -T php php bin/console hautelook:fixtures:load --no-interaction
+
 echo ">> Nettoyage du cache"
 $COMPOSE exec -T php php bin/console cache:clear --no-interaction
 
