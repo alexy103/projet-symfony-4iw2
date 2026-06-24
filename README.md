@@ -38,7 +38,7 @@ docker compose exec php php bin/console hautelook:fixtures:load --no-interaction
 
 ## Accès
 
-| Service | URL | Local | Prod |
+| Service | Local | Prod |
 |---|---| --- | --- |
 | Application | http://localhost:9000 | https://excuses.escanordev.fr |
 | Back-office (admin) | http://localhost:9000/admin | https://excuses.escanordev.fr/admin |
