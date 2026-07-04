@@ -326,7 +326,6 @@ Statuts possibles :
 ```txt
 accepted
 rejected
-needs_changes
 ```
 
 ### tag

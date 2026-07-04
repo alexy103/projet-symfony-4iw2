@@ -2,7 +2,7 @@ App\Entity\ExcuseValidation:
     excuse_validation_1:
         excuse: '@classic_excuse_2'
         validator: '@user_validator'
-        status: 'needs_changes'
+        status: 'accepted'
         comment: 'La justification est recevable, mais il manque l''heure d''arrivée prévue.'
         validatedAt: <(new \DateTimeImmutable('2026-06-11 09:00:00'))>
 

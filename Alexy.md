@@ -213,7 +213,6 @@ Statuts possibles :
 ```txt
 accepted
 rejected
-needs_changes
 ```
 
 Routes possibles :
