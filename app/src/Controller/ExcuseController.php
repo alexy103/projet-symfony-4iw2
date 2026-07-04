@@ -15,6 +15,7 @@ use App\Repository\ExcuseRepository;
 use App\Repository\ExcuseToneRepository;
 use App\Repository\ExcuseValidationRepository;
 use App\Security\Voter\ExcuseVoter;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,7 +88,7 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/excuses/new/{type}', name: 'app_excuse_new_type', methods: ['GET', 'POST'], requirements: ['type' => 'classic|emergency|professional'])]
-    public function newByType(string $type, Request $request, EntityManagerInterface $entityManager): Response
+    public function newByType(string $type, Request $request, EntityManagerInterface $entityManager, NotificationService $notificationService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -106,6 +107,12 @@ final class ExcuseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($excuse);
             $entityManager->flush();
+
+            $notificationService->notify(
+                $user,
+                'Excuse soumise',
+                sprintf('Ton excuse « %s » a ete soumise a validation.', $excuse->getTitle())
+            );
 
             $this->addFlash('success', 'Excuse créée et soumise à validation.');
 
@@ -191,7 +198,7 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/excuses/{id}/resubmit', name: 'app_excuse_resubmit', methods: ['POST'])]
-    public function resubmit(Request $request, Excuse $excuse, EntityManagerInterface $entityManager): Response
+    public function resubmit(Request $request, Excuse $excuse, EntityManagerInterface $entityManager, NotificationService $notificationService): Response
     {
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_EDIT, $excuse);
 
@@ -208,6 +215,14 @@ final class ExcuseController extends AbstractController
         $excuse->setStatus('pending');
         $excuse->setUpdatedAt(new \DateTimeImmutable());
         $entityManager->flush();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $notificationService->notify(
+            $user,
+            'Excuse resoumise',
+            sprintf('Ton excuse « %s » a ete resoumise a validation.', $excuse->getTitle())
+        );
 
         $this->addFlash('success', 'Excuse resoumise à validation.');
 

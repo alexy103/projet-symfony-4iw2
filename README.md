@@ -11,7 +11,7 @@ Application web Symfony de **génération, validation et notation d'excuses**. L
 - **Doctrine ORM** (héritage JOINED), **API Platform** (API JSON)
 - **EasyAdmin** (back-office), **Symfony Mailer** (e-mails), **HttpClient** (API météo Open-Meteo)
 - **Tailwind CSS** (CDN), **Mailpit** (boîte mail de dev)
-- **PHPUnit** (tests)
+- **PHPUnit** + **PHPStan niveau 5** + **GitHub Actions CI**
 
 ## Prérequis
 
@@ -63,6 +63,16 @@ Tous les comptes utilisent le mot de passe **`password`**.
 docker compose exec php php bin/phpunit
 ```
 
+## Vérifications qualité (local)
+
+```bash
+docker compose exec php php bin/console lint:yaml config fixtures --parse-tags
+docker compose exec php php bin/console lint:twig templates
+docker compose exec php php bin/console lint:container
+docker compose exec php vendor/bin/phpstan analyse --no-progress --memory-limit=512M
+docker compose exec php php bin/phpunit
+```
+
 ## Fonctionnalités principales
 
 - **Authentification** sécurisée (Security Component, mots de passe hachés) et **3 rôles** (`USER`, `VALIDATOR`, `ADMIN`).
@@ -74,6 +84,8 @@ docker compose exec php php bin/phpunit
 - **API JSON** (API Platform + Serializer, groupes de normalisation).
 - **API externe** : météo de Paris (Open-Meteo via HttpClient) → « météo des excuses » sur le dashboard.
 - **Back-office** EasyAdmin sécurisé (`ROLE_ADMIN`).
+- **Notifications métier** : soumission/resoumission, validation/rejet, nouveau commentaire, badge débloqué.
+- **CI GitHub Actions** : lint YAML/Twig/container + PHPStan + PHPUnit.
 
 ## Modèle de données (MCD)
 

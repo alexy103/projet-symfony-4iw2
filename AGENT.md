@@ -12,6 +12,12 @@ Quand du code existant est modifié :
 - expliquer précisément les changements effectués ;
 - signaler les incertitudes au lieu d’affirmer sans vérifier.
 
+## Source de vérité
+
+`AGENT.md` est la source de vérité unique pour le cadrage produit/technique du projet.
+
+Tout document parallèle est secondaire et ne doit pas contredire ce fichier.
+
 ## Contexte général du projet
 
 Le projet est une application web Symfony + Twig appelée provisoirement **générateur d’excuses**.
@@ -896,14 +902,17 @@ Cette section est maintenue au fil des echanges pour aligner tous les collaborat
 - Etape 11 terminee : endpoint random limite aux excuses `validated`.
 - Etape 12 terminee : ajustements front/profil pour distinguer "mes excuses" et liste publique des excuses validees.
 - Etape 13 terminee : ajout de l'acces global a `/my-excuses` (onglet "Mes excuses") et affichage du statut de commentaires recus sur les excuses validees de l'auteur.
+- Etape 14 terminee : filtres `/excuses` et tri enrichis (type, categorie, contexte, ton, tri) avec UI dediee.
+- Etape 15 terminee : CI en place (`lint` + `tests`) via GitHub Actions.
+- Etape 16 terminee : PHPStan installe, configure au niveau 5, integre a la CI.
+- Etape 17 terminee : API externe meteo (HttpClient) integree sur l'accueil avec fallback.
+- Etape 18 terminee : couverture de tests renforcee (unitaire score, voter, meteo + fonctionnel securite).
+- Etape 19 terminee : notifications metier completees (soumission/resoumission, commentaire, badge), en plus de validation/rejet.
+- Etape 20 terminee : alignement de la documentation (README + sections historiques) sur l'etat reel du code et des tests.
 
 ### Prochaines etapes prioritaires
 
-- Ajouter les tests minimum obligatoires du sujet :
-  - 1 test unitaire (`CredibilityScoreService`).
-  - 1 test fonctionnel (droits API + flux validator).
-- Ajouter l'integration API externe via HttpClient (ex: meteo) avec gestion d'erreurs/fallback.
-- Brancher Mailer/Notifier sur les evenements cle (soumission, validation, rejet).
-- Mettre en place l'outillage qualite manquant : PHPUnit, PHPStan, pipeline CI (lint + analyse statique + tests).
+- Ajouter des tests fonctionnels metier plus profonds sur les flux authentifies (API write/read et transitions validator en base test dediee).
+- Faire une passe de recette finale avant rendu (roles, routes critiques, notifications, filtres).
 
 
