@@ -139,10 +139,18 @@ class ExcuseRepository extends ServiceEntityRepository
                 ->setParameter('maxCredibility', (int) $filters['maxCredibility']);
         }
 
-        return $qb
-            ->orderBy('e.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $sort = mb_strtolower((string) ($filters['sort'] ?? 'recent'));
+
+        match ($sort) {
+            'oldest' => $qb->orderBy('e.createdAt', 'ASC'),
+            'credibility_desc' => $qb->orderBy('e.credibilityScore', 'DESC')->addOrderBy('e.createdAt', 'DESC'),
+            'credibility_asc' => $qb->orderBy('e.credibilityScore', 'ASC')->addOrderBy('e.createdAt', 'DESC'),
+            'title_asc' => $qb->orderBy('e.title', 'ASC')->addOrderBy('e.createdAt', 'DESC'),
+            'title_desc' => $qb->orderBy('e.title', 'DESC')->addOrderBy('e.createdAt', 'DESC'),
+            default => $qb->orderBy('e.createdAt', 'DESC'),
+        };
+
+        return $qb->getQuery()->getResult();
     }
 
     //    /**
