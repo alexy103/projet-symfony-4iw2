@@ -1,0 +1,34 @@
+App\Entity\EmergencyExcuse:
+    emergency_excuse_1:
+        title: 'Incident familial urgent'
+        content: 'J''ai dû accompagner un proche aux urgences juste avant de partir.'
+        status: 'pending'
+        urgencyLevel: 9
+        credibilityScore: 81
+        createdAt: <(new \DateTimeImmutable('2026-06-12 06:55:00'))>
+        updatedAt: null
+        author: '@user_alex'
+        category: '@category_absence'
+        context: '@context_travail'
+        tone: '@tone_dramatique'
+        tags: ['@tag_credible', '@tag_risque']
+        emergencyLevel: 5
+        requiresProof: true
+
+    emergency_excuse_2:
+        title: 'Panne complète de train'
+        content: 'Le train est resté bloqué plus de quarante minutes entre deux gares.'
+        status: 'rejected'
+        urgencyLevel: 8
+        credibilityScore: 58
+        createdAt: <(new \DateTimeImmutable('2026-06-09 09:10:00'))>
+        updatedAt: <(new \DateTimeImmutable('2026-06-09 12:25:00'))>
+        author: '@user_sam'
+        category: '@category_retard'
+        context: '@context_transport'
+        tone: '@tone_dramatique'
+        tags: ['@tag_risque', '@tag_transport']
+        emergencyLevel: 4
+        requiresProof: false
+
+

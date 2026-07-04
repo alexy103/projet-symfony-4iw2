@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes excuses{% endblock %}
+
+{% block body %}
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Mes excuses</h1>
+        <a href="{{ path('app_excuse_new') }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">Créer</a>
+    </div>
+
+    {% if excuses is empty %}
+        <p class="text-slate-500">Tu n'as encore créé aucune excuse.</p>
+    {% else %}
+        <div class="space-y-3">
+            {% for excuse in excuses %}
+                <article class="relative p-4 bg-white border rounded-lg">
+                    <div class="absolute top-4 right-4">
+                        {{ include('excuse/_type_badge.html.twig', {type: excuseTypes[excuse.id]|default('')}) }}
+                    </div>
+                    <div class="flex items-center gap-2 pr-32">
+                        <h2 class="font-semibold">{{ excuse.title }}</h2>
+                        {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+                    </div>
+                    <p class="text-sm text-slate-600 mt-1">
+                        {% if excuse.updatedAt %}
+                            Dernière mise à jour : {{ excuse.updatedAt|date('d/m/Y H:i') }}
+                        {% else %}
+                            Créée le : {{ excuse.createdAt|date('d/m/Y H:i') }}
+                        {% endif %}
+                    </p>
+                    {% if excuse.status == 'validated' %}
+                        {% set commentsCount = commentCounts[excuse.id]|default(0) %}
+                        <p class="mt-2 text-sm {{ commentsCount > 0 ? 'text-green-700 bg-green-50 border-green-200' : 'text-slate-600 bg-slate-50 border-slate-200' }} border rounded p-2">
+                            {% if commentsCount > 0 %}
+                                <span class="font-semibold">Commentaires reçus :</span> {{ commentsCount }}
+                            {% else %}
+                                Aucun commentaire pour le moment.
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    {% if excuse.status == 'rejected' %}
+                        {% set reason = rejectionReasons[excuse.id]|default(null) %}
+                        <p class="mt-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded p-2">
+                            <span class="font-semibold">Motif du rejet :</span>
+                            {{ reason ?: 'Aucun commentaire n\'a été saisi par le validateur.' }}
+                        </p>
+                    {% endif %}
+                    <div class="mt-3 flex gap-3">
+                        <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="text-indigo-600 hover:underline">Voir</a>
+                        {% if is_granted('EXCUSE_EDIT', excuse) %}
+                            <a href="{{ path('app_excuse_edit', {'id': excuse.id}) }}" class="text-amber-600 hover:underline">Modifier</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+

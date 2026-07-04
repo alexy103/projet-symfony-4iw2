@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications — Excusatron 3000{% endblock %}
+
+{% block body %}
+    <div class="max-w-2xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-extrabold text-slate-900">Notifications</h1>
+            {% if notifications|filter(n => not n.isRead)|length > 0 %}
+                <form method="post" action="{{ path('app_notification_read_all') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('read-all') }}">
+                    <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">Tout marquer comme lu</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="space-y-3">
+            {% for notification in notifications %}
+                <div class="rounded-xl border p-4 flex items-start gap-3 {{ notification.isRead ? 'bg-white border-slate-200' : 'bg-indigo-50 border-indigo-200' }}">
+                    <div class="text-xl mt-0.5">{{ notification.isRead ? '📭' : '📬' }}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <h2 class="font-semibold text-slate-900">{{ notification.title }}</h2>
+                            {% if not notification.isRead %}
+                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            {% endif %}
+                        </div>
+                        <p class="text-sm text-slate-600 mt-0.5">{{ notification.message }}</p>
+                        <p class="text-xs text-slate-400 mt-1">{{ notification.createdAt|date('d/m/Y à H:i') }}</p>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0">
+                        {% if not notification.isRead %}
+                            <form method="post" action="{{ path('app_notification_read', {id: notification.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('read' ~ notification.id) }}">
+                                <button type="submit" class="px-2.5 py-1.5 rounded-md text-xs bg-slate-100 hover:bg-slate-200 transition">Marquer lu</button>
+                            </form>
+                        {% endif %}
+                        <form method="post" action="{{ path('app_notification_delete', {id: notification.id}) }}"
+                              onsubmit="return confirm('Supprimer cette notification ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ notification.id) }}">
+                            <button type="submit" class="px-2.5 py-1.5 rounded-md text-xs text-red-600 hover:bg-red-50 transition">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-12 text-slate-400">
+                    <div class="text-4xl mb-2">📭</div>
+                    Aucune notification.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

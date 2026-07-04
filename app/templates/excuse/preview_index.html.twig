@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Excuses (aperçu) — Excusatron 3000{% endblock %}
+
+{% block body %}
+    <div class="max-w-3xl mx-auto">
+        <div class="mb-4 rounded-md bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-2">
+            Page d'aperçu temporaire (lecture seule) — sert à tester les commentaires et les notes en attendant la page détail définitive.
+        </div>
+
+        <h1 class="text-2xl font-extrabold text-slate-900 mb-4">Excuses</h1>
+
+        <div class="space-y-3">
+            {% for excuse in excuses %}
+                <a href="{{ path('app_excuse_preview_show', {id: excuse.id}) }}"
+                   class="relative block bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:border-indigo-300 transition">
+                    <div class="absolute top-4 right-4">
+                        {{ include('excuse/_type_badge.html.twig', {type: excuseTypes[excuse.id]|default('')}) }}
+                    </div>
+                    <div class="flex items-center gap-2 pr-32">
+                        <span class="font-semibold text-slate-900">{{ excuse.title }}</span>
+                        {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+                    </div>
+                    <p class="text-sm text-slate-500 mt-1 line-clamp-1">{{ excuse.content }}</p>
+                    <p class="text-xs text-slate-400 mt-1">par {{ excuse.author.userIdentifier }} · {{ excuse.createdAt|date('d/m/Y') }}</p>
+                </a>
+            {% else %}
+                <p class="text-slate-400 text-center py-8">Aucune excuse.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

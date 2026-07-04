@@ -1,0 +1,115 @@
+{% form_theme form 'form/tailwind_theme.html.twig' %}
+{{ form_start(form, {'attr': {'class': 'space-y-4', 'data-excuse-form': '1', 'data-excuse-type': type|default('')}}) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.content) }}
+    {{ form_row(form.urgencyLevel) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.context) }}
+    {{ form_row(form.tone) }}
+
+    {% if form.estimatedDelay is defined %}
+        <div data-field-group="estimatedDelay">
+            {{ form_row(form.estimatedDelay) }}
+        </div>
+    {% endif %}
+    {% if form.isReusable is defined %}
+        {{ form_row(form.isReusable) }}
+    {% endif %}
+
+    {% if form.emergencyLevel is defined %}
+        <div data-field-group="emergency">
+            {{ form_row(form.emergencyLevel) }}
+        </div>
+    {% endif %}
+    {% if form.requiresProof is defined %}
+        <div data-field-group="emergency">
+            {{ form_row(form.requiresProof) }}
+        </div>
+    {% endif %}
+
+    {% if form.targetRecipient is defined %}
+        <div data-field-group="professional">
+            {{ form_row(form.targetRecipient) }}
+        </div>
+    {% endif %}
+    {% if form.professionalTone is defined %}
+        <div data-field-group="professional">
+            {{ form_row(form.professionalTone) }}
+        </div>
+    {% endif %}
+
+    <div class="pt-2 flex gap-2">
+        <button class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition" type="submit">Enregistrer</button>
+        <a href="{{ path('app_my_excuses') }}" class="px-4 py-2 rounded-md bg-slate-200 hover:bg-slate-300 transition">Annuler</a>
+    </div>
+{{ form_end(form) }}
+
+<script>
+    (function () {
+        const formEl = document.querySelector('form[data-excuse-form="1"]');
+        if (!formEl) {
+            return;
+        }
+
+        const normalize = function (value) {
+            return (value || '')
+                .toString()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .trim()
+                .toLowerCase();
+        };
+
+        const toggleGroup = function (group, visible) {
+            group.classList.toggle('hidden', !visible);
+            group.querySelectorAll('input, select, textarea').forEach(function (field) {
+                field.disabled = !visible;
+            });
+        };
+
+        const categorySelect = formEl.querySelector('select[name$="[category]"]');
+        const typeSelect = formEl.querySelector('select[name$="[type]"]');
+        const estimatedDelayGroup = formEl.querySelector('[data-field-group="estimatedDelay"]');
+        const professionalGroups = formEl.querySelectorAll('[data-field-group="professional"]');
+        const emergencyGroups = formEl.querySelectorAll('[data-field-group="emergency"]');
+
+        const refreshByCategory = function () {
+            if (!categorySelect || !estimatedDelayGroup) {
+                return;
+            }
+
+            const selectedText = categorySelect.options[categorySelect.selectedIndex]?.text || '';
+            toggleGroup(estimatedDelayGroup, normalize(selectedText) === 'retard');
+        };
+
+        const refreshByType = function () {
+            const typeFromSelect = typeSelect ? normalize(typeSelect.value) : '';
+            const typeFromContext = normalize(formEl.dataset.excuseType);
+            const selectedType = typeFromSelect || typeFromContext;
+
+            if (!selectedType) {
+                return;
+            }
+
+            professionalGroups.forEach(function (group) {
+                toggleGroup(group, selectedType === 'professional');
+            });
+
+            emergencyGroups.forEach(function (group) {
+                toggleGroup(group, selectedType === 'emergency');
+            });
+        };
+
+        if (categorySelect) {
+            categorySelect.addEventListener('change', refreshByCategory);
+        }
+
+        if (typeSelect) {
+            typeSelect.addEventListener('change', refreshByType);
+        }
+
+        refreshByCategory();
+        refreshByType();
+    })();
+</script>
+

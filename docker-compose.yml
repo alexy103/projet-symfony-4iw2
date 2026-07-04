@@ -5,10 +5,13 @@ services:
       context: .
     depends_on:
       - db
+      - mailer
     ports:
       - "9000:80"
     volumes:
       - .:/var/www/html
+      - vendor_data:/var/www/html/app/vendor
+      - var_data:/var/www/html/app/var
 
   db:
     image: postgres:16-alpine
@@ -18,7 +21,7 @@ services:
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
 
@@ -30,6 +33,17 @@ services:
     ports:
       - "8080:8080"
 
+  mailer:
+    image: axllent/mailpit
+    container_name: mailer
+    ports:
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
 volumes:
   db_data:
+  vendor_data:
+  var_data:
 

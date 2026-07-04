@@ -1,0 +1,70 @@
+App\Entity\Notification:
+    notification_1:
+        user: '@user_alex'
+        title: 'Excuse validée'
+        message: 'Ton excuse d''urgence a été acceptée par un validateur.'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-12 08:15:00'))>
+
+    notification_2:
+        user: '@user_sam'
+        title: 'Demande de modification'
+        message: 'Ta justification nécessite un complément avant validation.'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-11 09:05:00'))>
+
+    notification_3:
+        user: '@user_validator'
+        title: 'Nouveau commentaire'
+        message: 'Un utilisateur a ajouté un commentaire sur une excuse en attente.'
+        isRead: true
+        createdAt: <(new \DateTimeImmutable('2026-06-13 15:10:00'))>
+
+    notification_alex_refus:
+        user: '@user_alex'
+        title: 'Excuse refusée'
+        message: 'Ton excuse « panne d''oreiller » a été jugée peu crédible.'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-13 18:42:00'))>
+
+    notification_alex_commentaire:
+        user: '@user_alex'
+        title: 'Nouveau commentaire'
+        message: 'Sam a commenté ton excuse : « Légendaire, je garde l''idée. »'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-14 10:30:00'))>
+
+    notification_alex_badge:
+        user: '@user_alex'
+        title: 'Nouveau badge'
+        message: 'Tu as débloqué le badge « Mytho débutant ». Bien joué.'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-14 11:00:00'))>
+
+    notification_alex_note:
+        user: '@user_alex'
+        title: 'Note reçue'
+        message: 'Ton excuse a reçu une note de 5/5 pour sa créativité.'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-15 09:12:00'))>
+
+    notification_alex_attente:
+        user: '@user_alex'
+        title: 'Excuse en attente'
+        message: 'Ton excuse a bien été soumise et attend un validateur.'
+        isRead: true
+        createdAt: <(new \DateTimeImmutable('2026-06-10 14:00:00'))>
+
+    notification_alex_bienvenue:
+        user: '@user_alex'
+        title: 'Bienvenue sur Excusatron 3000'
+        message: 'Crée ta première excuse et commence à accumuler les badges.'
+        isRead: true
+        createdAt: <(new \DateTimeImmutable('2026-06-09 08:00:00'))>
+
+    notification_sam_badge:
+        user: '@user_sam'
+        title: 'Nouveau badge'
+        message: 'Tu as débloqué le badge « Mytho débutant ».'
+        isRead: false
+        createdAt: <(new \DateTimeImmutable('2026-06-14 16:20:00'))>

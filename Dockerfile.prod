@@ -1,0 +1,43 @@
+# --- Étape 1 : dépendances PHP (sans dev) ---
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY app/ ./
+RUN composer install --no-dev --no-scripts --prefer-dist --no-progress --no-interaction --optimize-autoloader --classmap-authoritative
+
+# --- Étape 2 : image finale ---
+FROM php:8.4-apache AS app
+
+RUN apt-get update && \
+    apt-get install -y libpq-dev libzip-dev libicu-dev unzip && \
+    docker-php-ext-install pdo_pgsql zip intl opcache && \
+    rm -rf /var/lib/apt/lists/*
+
+# Configuration PHP de production
+RUN { \
+      echo "date.timezone=Europe/Paris"; \
+      echo "opcache.enable=1"; \
+      echo "opcache.validate_timestamps=0"; \
+      echo "opcache.max_accelerated_files=20000"; \
+      echo "opcache.memory_consumption=192"; \
+      echo "realpath_cache_size=4096K"; \
+      echo "realpath_cache_ttl=600"; \
+    } > /usr/local/etc/php/conf.d/prod.ini
+
+# Apache : racine web = public/
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
+    && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
+    && a2enmod rewrite
+
+WORKDIR /var/www/html
+COPY app/ /var/www/html/
+COPY --from=vendor /app/vendor /var/www/html/vendor
+
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
+# Copie les assets des bundles (EasyAdmin, API Platform...) dans public/bundles/
+RUN php bin/console assets:install public --no-interaction \
+    && mkdir -p var public/uploads/badges \
+    && chown -R www-data:www-data var public/uploads

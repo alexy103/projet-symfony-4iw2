@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil — Excusatron 3000{% endblock %}
+
+{% block body %}
+    <div class="max-w-3xl mx-auto space-y-8">
+        <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-3xl">
+                🤥
+            </div>
+            <div>
+                <h1 class="text-2xl font-extrabold text-slate-900">Mon profil</h1>
+                <p class="text-slate-500">{{ app.user.userIdentifier }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-lg text-slate-900 mb-4">Informations</h2>
+            <dl class="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <dt class="text-slate-500">Email</dt>
+                    <dd class="font-medium text-slate-800">{{ app.user.userIdentifier }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Rôles</dt>
+                    <dd class="flex flex-wrap gap-1 mt-1">
+                        {% for role in app.user.roles %}
+                            <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">{{ role }}</span>
+                        {% endfor %}
+                    </dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-lg text-slate-900 mb-4">
+                Mes badges
+                <span class="text-slate-400 font-normal text-sm">({{ app.user.badges|length }})</span>
+            </h2>
+
+            {% if app.user.badges is empty %}
+                <p class="text-sm text-slate-500">Aucun badge pour l'instant. Mentez mieux, ça viendra.</p>
+            {% else %}
+                <div class="grid sm:grid-cols-2 gap-4">
+                    {% for badge in app.user.badges %}
+                        <div class="flex items-start gap-3 border border-slate-200 rounded-lg p-4">
+                            <div class="text-2xl">{{ badge.icon|default('🏅') }}</div>
+                            <div>
+                                <div class="font-semibold text-slate-800">{{ badge.name }}</div>
+                                {% if badge.description %}
+                                    <div class="text-sm text-slate-500">{{ badge.description }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6" data-tabs-root>
+            <div class="flex items-center justify-between gap-2 mb-4">
+                <h2 class="font-bold text-lg text-slate-900">Mes excuses</h2>
+                <a href="{{ path('app_excuse_new') }}" class="px-3 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition">Créer une excuse</a>
+            </div>
+
+            <div class="flex gap-2 mb-4">
+                <button type="button" data-tab-trigger="mine" class="px-3 py-2 rounded-md text-sm bg-indigo-600 text-white">Mon compte</button>
+                <button type="button" data-tab-trigger="public" class="px-3 py-2 rounded-md text-sm bg-slate-100 text-slate-700">Toutes les excuses</button>
+            </div>
+
+            <div data-tab-panel="mine">
+                {% if myExcuses is empty %}
+                    <p class="text-sm text-slate-500">Tu n'as encore créé aucune excuse.</p>
+                {% else %}
+                    <div class="space-y-3">
+                        {% for excuse in myExcuses %}
+                            <article class="relative p-4 border rounded-lg">
+                                <div class="absolute top-4 right-4">
+                                    {{ include('excuse/_type_badge.html.twig', {type: myExcuseTypes[excuse.id]|default('')}) }}
+                                </div>
+                                <div class="flex items-center gap-2 pr-32">
+                                    <h3 class="font-semibold">{{ excuse.title }}</h3>
+                                    {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+                                </div>
+                                <p class="text-sm text-slate-600 mt-1">{{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                                {% if excuse.status == 'validated' %}
+                                    {% set commentsCount = myExcuseCommentCounts[excuse.id]|default(0) %}
+                                    <p class="mt-2 text-xs {{ commentsCount > 0 ? 'text-green-700' : 'text-slate-500' }}">
+                                        {% if commentsCount > 0 %}
+                                            {{ commentsCount }} commentaire{{ commentsCount > 1 ? 's' : '' }} reçu{{ commentsCount > 1 ? 's' : '' }}.
+                                        {% else %}
+                                            Aucun commentaire pour le moment.
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+                                <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="inline-block mt-2 text-indigo-600 hover:underline text-sm">Voir le détail</a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div data-tab-panel="public" class="hidden">
+                {% if publicExcuses is empty %}
+                    <p class="text-sm text-slate-500">Aucune excuse validée disponible.</p>
+                {% else %}
+                    <div class="space-y-3">
+                        {% for excuse in publicExcuses %}
+                            <article class="relative p-4 border rounded-lg">
+                                <div class="absolute top-4 right-4">
+                                    {{ include('excuse/_type_badge.html.twig', {type: publicExcuseTypes[excuse.id]|default('')}) }}
+                                </div>
+                                <div class="flex items-center gap-2 pr-32">
+                                    <h3 class="font-semibold">{{ excuse.title }}</h3>
+                                    {{ include('excuse/_status_badge.html.twig', {status: excuse.status}) }}
+                                </div>
+                                <p class="text-sm text-slate-600 mt-1">Par {{ excuse.author.email }} — {{ excuse.createdAt|date('d/m/Y H:i') }}</p>
+                                <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="inline-block mt-2 text-indigo-600 hover:underline text-sm">Voir le détail</a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const root = document.querySelector('[data-tabs-root]');
+            if (!root) {
+                return;
+            }
+
+            const triggers = root.querySelectorAll('[data-tab-trigger]');
+            const panels = root.querySelectorAll('[data-tab-panel]');
+
+            function activate(tabName) {
+                triggers.forEach(function (trigger) {
+                    const active = trigger.getAttribute('data-tab-trigger') === tabName;
+                    trigger.classList.toggle('bg-indigo-600', active);
+                    trigger.classList.toggle('text-white', active);
+                    trigger.classList.toggle('bg-slate-100', !active);
+                    trigger.classList.toggle('text-slate-700', !active);
+                });
+
+                panels.forEach(function (panel) {
+                    panel.classList.toggle('hidden', panel.getAttribute('data-tab-panel') !== tabName);
+                });
+            }
+
+            triggers.forEach(function (trigger) {
+                trigger.addEventListener('click', function () {
+                    activate(trigger.getAttribute('data-tab-trigger'));
+                });
+            });
+        })();
+    </script>
+{% endblock %}

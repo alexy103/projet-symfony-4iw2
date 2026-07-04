@@ -1,0 +1,14 @@
+App\Entity\ExcuseCategory:
+    category_retard:
+        name: 'Retard'
+        description: 'Excuses pour des retards ponctuels.'
+
+    category_absence:
+        name: 'Absence'
+        description: 'Excuses pour des absences courtes ou longues.'
+
+    category_reunion:
+        name: 'Réunion manquée'
+        description: 'Excuses liées aux réunions oubliées ou ratées.'
+
+
