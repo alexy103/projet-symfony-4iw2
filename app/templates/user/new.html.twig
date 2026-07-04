@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}Créer un compte — Excusatron 3000{% endblock %}
 
 {% block body %}
-    <h1>Create new User</h1>
+    <div class="max-w-xl mx-auto">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-8">
+            <div class="text-center mb-6">
+                <div class="text-4xl">📝</div>
+                <h1 class="mt-2 text-2xl font-extrabold text-slate-900">Créer un compte</h1>
+                <p class="mt-1 text-sm text-slate-500">Rejoins Excusatron 3000 et commence à poster tes meilleures excuses.</p>
+            </div>
 
-    {{ include('user/_form.html.twig') }}
+            {{ include('user/_form.html.twig', {'button_label': 'Créer mon compte'}) }}
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+            <p class="mt-4 text-sm text-slate-500 text-center">
+                Déjà inscrit ?
+                <a href="{{ path('app_login') }}" class="text-indigo-600 font-semibold hover:underline">Se connecter</a>
+            </p>
+        </div>
+    </div>
 {% endblock %}
