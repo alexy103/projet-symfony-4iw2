@@ -32,6 +32,9 @@ jobs:
       - name: Lint Container
         run: php bin/console lint:container
 
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github --memory-limit=512M
+
   tests:
     runs-on: ubuntu-latest
     defaults:
