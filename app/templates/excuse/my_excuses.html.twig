@@ -13,7 +13,8 @@
     {% else %}
         <div class="space-y-3">
             {% for excuse in excuses %}
-                <article class="relative p-4 bg-white border rounded-lg">
+                <article class="relative p-4 bg-white border rounded-lg hover:shadow-md hover:border-indigo-300 transition">
+                    <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="absolute inset-0 z-0" aria-label="Voir le détail de {{ excuse.title }}"></a>
                     <div class="absolute top-4 right-4">
                         {{ include('excuse/_type_badge.html.twig', {type: excuseTypes[excuse.id]|default('')}) }}
                     </div>
@@ -45,12 +46,11 @@
                             {{ reason ?: 'Aucun commentaire n\'a été saisi par le validateur.' }}
                         </p>
                     {% endif %}
-                    <div class="mt-3 flex gap-3">
-                        <a href="{{ path('app_excuse_show', {'id': excuse.id}) }}" class="text-indigo-600 hover:underline">Voir</a>
-                        {% if is_granted('EXCUSE_EDIT', excuse) %}
+                    {% if is_granted('EXCUSE_EDIT', excuse) %}
+                        <div class="relative z-10 mt-3 flex gap-3">
                             <a href="{{ path('app_excuse_edit', {'id': excuse.id}) }}" class="text-amber-600 hover:underline">Modifier</a>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </article>
             {% endfor %}
         </div>
