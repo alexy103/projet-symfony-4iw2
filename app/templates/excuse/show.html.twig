@@ -67,5 +67,12 @@
             </form>
         {% endif %}
     </div>
+
+    {% if excuse.status == 'validated' or is_granted('ROLE_ADMIN') %}
+        <div class="mt-6 space-y-4">
+            {{ include('excuse/_rating.html.twig') }}
+            {{ include('excuse/_comments.html.twig') }}
+        </div>
+    {% endif %}
 {% endblock %}
 

@@ -7,10 +7,12 @@ use App\Entity\EmergencyExcuse;
 use App\Entity\Excuse;
 use App\Entity\ProfessionalExcuse;
 use App\Entity\User;
+use App\Form\ExcuseCommentType;
 use App\Form\ExcuseType;
 use App\Repository\ExcuseCategoryRepository;
 use App\Repository\ExcuseCommentRepository;
 use App\Repository\ExcuseContextRepository;
+use App\Repository\ExcuseRatingRepository;
 use App\Repository\ExcuseRepository;
 use App\Repository\ExcuseToneRepository;
 use App\Repository\ExcuseValidationRepository;
@@ -126,16 +128,28 @@ final class ExcuseController extends AbstractController
     }
 
     #[Route('/excuses/{id}', name: 'app_excuse_show', methods: ['GET'])]
-    public function show(Excuse $excuse, ExcuseValidationRepository $validationRepository): Response
+    public function show(
+        Excuse $excuse,
+        ExcuseValidationRepository $validationRepository,
+        ExcuseCommentRepository $commentRepository,
+        ExcuseRatingRepository $ratingRepository,
+    ): Response
     {
         $this->denyAccessUnlessGranted(ExcuseVoter::EXCUSE_VIEW, $excuse);
 
         $rejectionReasons = $this->buildRejectionReasons([$excuse], $validationRepository);
 
+        /** @var User $user */
+        $user = $this->getUser();
+
         return $this->render('excuse/show.html.twig', [
             'excuse' => $excuse,
             'excuseType' => $this->resolveType($excuse),
             'rejectionReason' => $rejectionReasons[$excuse->getId() ?? 0] ?? null,
+            'comments' => $commentRepository->findForExcuse($excuse),
+            'comment_form' => $this->createForm(ExcuseCommentType::class)->createView(),
+            'rating_stats' => $ratingRepository->getStatsForExcuse($excuse),
+            'user_rating' => $ratingRepository->findOneByExcuseAndAuthor($excuse, $user),
         ]);
     }
 
