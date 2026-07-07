@@ -11,7 +11,7 @@ final class Version20260614114328 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create the excuse table and its category/context/tone/type tables';
     }
 
     public function up(Schema $schema): void

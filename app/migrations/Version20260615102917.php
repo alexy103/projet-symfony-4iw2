@@ -11,7 +11,7 @@ final class Version20260615102917 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Add owner relation to the tag table';
     }
 
     public function up(Schema $schema): void

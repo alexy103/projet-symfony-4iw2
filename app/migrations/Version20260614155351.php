@@ -11,7 +11,7 @@ final class Version20260614155351 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create badge, tag, excuse_comment, excuse_rating, excuse_validation and notification tables';
     }
 
     public function up(Schema $schema): void
