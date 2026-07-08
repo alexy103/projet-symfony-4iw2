@@ -24,6 +24,7 @@ Application web Symfony de **création, validation et notation d'excuses**. Les 
 
 ## Installation
 
+### En dev 
 ```bash
 # 1. Cloner le dépôt
 git clone <url-du-depot> projet-symfony && cd projet-symfony
@@ -40,6 +41,14 @@ docker compose exec php php bin/console doctrine:migrations:migrate --no-interac
 # 5. Charger les fixtures (jeu de données de test)
 docker compose exec php php bin/console hautelook:fixtures:load --no-interaction
 ```
+
+### En prod
+
+```bash
+bash deploy.sh
+```
+
+**Il suffit ensuite d'associer un nom de domaine au projet et de mettre en place HTTPS**
 
 ## Accès
 
