@@ -1,6 +1,11 @@
+| Dev | Personne |
+| --- | --- |
+| alexy103 | DELAPORTE Alexy 4IW2 |
+| Escanor-dev95 | BARROSO Florian 4IW2 |
+
 # Excusatron 3000
 
-Application web Symfony de **génération, validation et notation d'excuses**. Les utilisateurs créent des excuses selon un contexte, une catégorie et un ton ; des validateurs les acceptent ou les refusent ; tout le monde commente, note, gagne des badges et reçoit des notifications.
+Application web Symfony de **création, validation et notation d'excuses**. Les utilisateurs créent des excuses selon un contexte, une catégorie et un ton ; des validateurs les acceptent ou les refusent ; tout le monde commente, note, gagne des badges et reçoit des notifications.
 
 > Projet de fin de cycle — Symfony 8.1 + Twig, conteneurisé avec Docker.
 
